@@ -1,0 +1,22 @@
+[
+  {"name": "Portable Fan", "price": 35.00, "description": "USB-powered personal fan", "quantity": 25},
+  {"name": "Power Bank", "price": 120.50, "description": "10,000mAh fast-charging power bank", "quantity": 15},
+  {"name": "Wireless Charger", "price": 89.99, "description": "Qi-certified wireless charging pad", "quantity": 18},
+  {"name": "Flash Drive", "price": 15.75, "description": "32GB USB 3.0 flash drive", "quantity": 50},
+  {"name": "Bluetooth Speaker", "price": 75.00, "description": "Portable mini Bluetooth speaker", "quantity": 22},
+  {"name": "Smart Plug", "price": 60.00, "description": "Wi-Fi smart plug with voice control", "quantity": 10},
+  {"name": "LED Ring Light", "price": 49.99, "description": "Selfie ring light with tripod stand", "quantity": 30},
+  {"name": "Stylus Pen", "price": 19.50, "description": "Universal stylus pen for tablets", "quantity": 40},
+  {"name": "Laptop Stand", "price": 99.00, "description": "Adjustable ergonomic laptop stand", "quantity": 14},
+  {"name": "HDMI Cable", "price": 12.75, "description": "2-meter 4K HDMI cable", "quantity": 60},
+  {"name": "Gaming Mouse", "price": 110.25, "description": "RGB backlit gaming mouse", "quantity": 17},
+  {"name": "Graphic Tablet", "price": 250.00, "description": "Drawing tablet with pressure sensitivity", "quantity": 8},
+  {"name": "VR Headset", "price": 450.00, "description": "Virtual reality headset for phones", "quantity": 5},
+  {"name": "Wireless Earbuds", "price": 135.90, "description": "Noise-cancelling true wireless earbuds", "quantity": 26},
+  {"name": "Smart Thermostat", "price": 199.99, "description": "Wi-Fi smart home thermostat", "quantity": 7},
+  {"name": "Security Camera", "price": 299.50, "description": "1080p indoor security camera", "quantity": 9},
+  {"name": "Surge Protector", "price": 34.00, "description": "7-outlet surge protector with USB ports", "quantity": 33},
+  {"name": "Key Finder", "price": 45.60, "description": "Bluetooth key finder with app tracking", "quantity": 20},
+  {"name": "USB Hub", "price": 29.99, "description": "4-port USB 3.0 data hub", "quantity": 45},
+  {"name": "Mini Projector", "price": 550.00, "description": "Portable mini LED projector", "quantity": 6}
+]

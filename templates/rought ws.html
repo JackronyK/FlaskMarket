@@ -1,0 +1,110 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    Manage Inventory | Admin Panel
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-cogs me-2"></i>Manage Inventory</h2>
+
+<form method="POST" id="batchDeleteForm">
+    <div class="d-flex justify-content-between mb-3">
+        <button id="deleteSelectedBtn" class="btn btn-danger" type="submit" name="action" value="delete_selected">
+            <i class="fas fa-trash-alt me-1"></i> Delete Selected
+        </button>
+        <span class="text-muted">Total Items: {{ items|length }}</span>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle" id="manageTable">
+        <thead class="table-dark">
+            <tr>
+                <th><input type="checkbox" id="selectAll"></th>
+                <th>Item ID</th>
+                <th>Name</th>
+                <th>Barcode</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Added By</th>
+                <th>Added At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    <input type="checkbox" class="item-checkbox" name="selected_items" value="{{ item.item_id }}">
+                </td>
+                <td>{{ item.item_id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.barcode }}</td>
+                <td>Ksh {{ "%.2f"|format(item.price) }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.added_by }}</td>
+                <td>{{ item.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>
+                    <a href="{{ url_for('admin_items_edit', item_id=item.item_id) }}" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm deleteBtn" data-id="{{ item.item_id }}">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+<!-- SweetAlert + DataTables Scripts -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all
+    document.getElementById('selectAll').addEventListener('change', function () {
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = this.checked);
+    });
+
+    // Single Delete
+    document.querySelectorAll('.deleteBtn').forEach(button => {
+        button.addEventListener('click', function () {
+            const itemId = this.dataset.id;
+            Swal.fire({
+                title: 'Confirm Deletion',
+                text: `Delete item ID ${itemId}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    window.location.href = `/admin/items/delete/${itemId}`;
+                }
+            });
+        });
+    });
+
+    // Batch Delete Confirmation
+    document.getElementById('batchDeleteForm').addEventListener('submit', function (e) {
+        const selected = document.querySelectorAll('.item-checkbox:checked');
+        if (selected.length === 0) {
+            e.preventDefault();
+            Swal.fire('No items selected', '', 'info');
+        } else {
+            const confirmDelete = confirm(`Delete ${selected.length} selected item(s)?`);
+            if (!confirmDelete) e.preventDefault();
+        }
+    });
+
+    // DataTables
+    $('#manageTable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+        lengthMenu: [10, 25, 50, 100]
+    });
+});
+</script>
+{% endblock %}

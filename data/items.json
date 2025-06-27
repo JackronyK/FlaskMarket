@@ -1,0 +1,12 @@
+[
+    {"name": "Phone",  "price": 500, "description": "A high-quality smartphone with latest features", "quantity": 30},
+    {"name": "Laptop",  "price": 1000, "description": "A powerful laptop suitable for work and gaming", "quantity": 20},
+    {"name": "Tablet",  "price": 300, "description": "A portable tablet perfect for reading and media", "quantity": 25},
+    {"name": "Smartwatch",  "price": 200, "description": "A stylish smartwatch with health tracking features", "quantity": 40},
+    {"name": "Headphones",  "price": 150, "description": "Noise-cancelling headphones for immersive sound", "quantity": 60},
+    {"name": "Charger",  "price": 50, "description": "Fast charger compatible with multiple devices", "quantity": 100},
+    {"name": "Mouse",  "price": 25, "description": "Ergonomic wireless mouse with long battery life", "quantity": 80},
+    {"name": "Keyboard",  "price": 40, "description": "Mechanical keyboard with backlit keys", "quantity": 70},
+    {"name": "Monitor",  "price": 200, "description": "24-inch HD monitor with vibrant display", "quantity": 15},
+    {"name": "Printer", "price": 150, "description": "All-in-one printer with wireless connectivity", "quantity": 10}
+]

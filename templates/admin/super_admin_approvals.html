@@ -1,0 +1,56 @@
+{% extends 'admin_base.html' %}
+
+{% block title %} Admin Approvals |Flask Market {% endblock %}
+
+{% block content%}
+<div class="container mt-5">
+    <h3 class="text-center mb-4 text-primary"><i class="fas fa-check-circle"></i> Admin Approvals</h3>
+    
+    {% if pending_admins %}
+    <div class="table-responsive">
+        <table class="table table-striped align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Admin ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Date Registered</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in pending_admins %}
+                <tr>
+                    <td>{{ admin.admin_id }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.email }}</td>
+                    <td>{{ admin.date_registered.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        <form method="POST" class= "d-inline">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                        </form>
+                        <form method="post" class="d-inline ms-2">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> No pending admin approvals at the moment.
+        </div>
+    {% endif %}        
+</div>
+{% endblock %}
+

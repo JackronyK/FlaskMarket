@@ -1,0 +1,142 @@
+<!-- templates for admin_base -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Admin | Flask Market{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        body {
+            background-color: #f1f0f3;
+            min-height: 200vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .admin-navbar {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            background-color: #212529;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark admin-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{{ url_for('admin_items_view' )}}"><i class="fas fa-shield-alt me-2"></i>Admin Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+                <span class="navbar-toggler-icon"> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="adminNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success" href="{{ url_for('admin_item_upload')}}">
+                            <i class="fas fa-upload me-2"></i>Upload Item
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-inf text-white" href="{{ url_for('admin_items_view')}}">
+                            <i class="fas fa-list me-2"></i>View items
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="{{ url_for('admin_items_manage')}}">
+                            <i class="fas fa-cogs me-2"></i>Manage Inventory
+                        </a>
+                    </li>
+                    {% if session.get('is_super_admin') %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-warning" href="{{ url_for('super_admin_approvals')}}">
+                            <i class="fas fa-check-circle me-2"></i>Approvals
+                            <span class="badge bg-danger ms-2">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-secondary" href="{{ url_for('super_admin_manage')}}">
+                            <i class="fas fa-users-cog me-2"></i>Manage Admins
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="{{ url_for('admin_logout')}}">
+                            <i class="fa-sign-out-alt me-2"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4 mb-5">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}                
+                <div class="alert alert--{{ category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %} Content {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-md-start">
+                    © {{ now.year }} Admin Panel | Flask Market
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-muted">v1.2.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- DataTables core -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- DataTables Buttons -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+
+    <!-- Export plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+</body>
+</html>

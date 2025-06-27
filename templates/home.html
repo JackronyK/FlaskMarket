@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block title%} Welcome| Flask Market{% endblock %}
+
+{% block content%}
+<div class="background-image">
+    <div class="overlay">
+        <div class="container text-center mt-2">
+            <div class="row align-items-center">
+                <div>
+                    <h2 class="display-4 text-white">Welcome to FlaskMarket 🛍️</h2>
+                    <p class="lead text-white">Discover amazing products, track prices, and enjoy a seamless shopping experience powered by Flask.</p>
+                    <a href="{{ url_for('market_page') }}" class="btn btn-success btn-lg mt-3 shadow custom-btn">
+                        <i class="fas fa-shopping-cart me-2"></i> Browse Market
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
