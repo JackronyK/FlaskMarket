@@ -1,110 +1,165 @@
 {% extends 'admin_base.html' %}
-
-{% block title %}
-    Manage Inventory | Admin Panel
-{% endblock %}
+{% block title %}Admin Home | Flask Market{% endblock %}
 
 {% block content %}
-<h2 class="mb-4"><i class="fas fa-cogs me-2"></i>Manage Inventory</h2>
-
-<form method="POST" id="batchDeleteForm">
-    <div class="d-flex justify-content-between mb-3">
-        <button id="deleteSelectedBtn" class="btn btn-danger" type="submit" name="action" value="delete_selected">
-            <i class="fas fa-trash-alt me-1"></i> Delete Selected
-        </button>
-        <span class="text-muted">Total Items: {{ items|length }}</span>
+<div class="container-fluid py-4">
+    {% if session.get('admin_logged_in') %}
+    
+    <!-- WELCOME SECTION -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="mb-2">Karibu Admin 🎩</h2>
+            <p class="lead text-muted">Manage inventory, approve admins, and keep the market running smoothly.</p>
+        </div>
     </div>
 
-    <table class="table table-bordered table-hover align-middle" id="manageTable">
-        <thead class="table-dark">
-            <tr>
-                <th><input type="checkbox" id="selectAll"></th>
-                <th>Item ID</th>
-                <th>Name</th>
-                <th>Barcode</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Added By</th>
-                <th>Added At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
-            <tr>
-                <td>
-                    <input type="checkbox" class="item-checkbox" name="selected_items" value="{{ item.item_id }}">
-                </td>
-                <td>{{ item.item_id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.barcode }}</td>
-                <td>Ksh {{ "%.2f"|format(item.price) }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.added_by }}</td>
-                <td>{{ item.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                <td>
-                    <a href="{{ url_for('admin_items_edit', item_id=item.item_id) }}" class="btn btn-sm btn-warning">
-                        <i class="fas fa-edit"></i> Edit
+    <!-- QUICK ACTIONS -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                <div class="card-body text-center">
+                    <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                    <h5>Upload New Item</h5>
+                    <p class="text-muted small">Add new products to the marketplace</p>
+                    <a href="{{ url_for('admin_item_upload') }}" class="btn btn-outline-success rounded-pill px-4">
+                        <i class="fas fa-upload"></i> Upload Item
                     </a>
-                    <button type="button" class="btn btn-danger btn-sm deleteBtn" data-id="{{ item.item_id }}">
-                        <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                <div class="card-body text-center">
+                    <i class="fas fa-boxes fa-3x text-primary mb-3"></i>
+                    <h5>View Inventory</h5>
+                    <p class="text-muted small">View all marketplace items</p>
+                    <a href="{{ url_for('admin_items_view') }}" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-eye me-2"></i> View Items
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                <div class="card-body text-center">
+                    <i class="fas fa-tools fa-3x text-warning mb-3"></i>
+                    <h5>Manage Inventory</h5>
+                    <p class="text-muted small">Update, delete or adjust stock levels</p>
+                    <a href="{{ url_for('admin_items_manage') }}" class="btn btn-warning rounded-pill px-4 mt-2">
+                        <i class="fas fa-cogs me-2"></i> Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- SweetAlert + DataTables Scripts -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Select all
-    document.getElementById('selectAll').addEventListener('change', function () {
-        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = this.checked);
-    });
+    {% if session.get('is_super_admin') %}
+    <!-- SUPER ADMIN ACTIONS -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card cardhover border-0 shadow-sm h-100 products">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-check fa-3x text-danger mb-3"></i>
+                    <h5>Approve Admins</h5>
+                    <p class="text-muted small">Review and approve admin requests</p>
+                    <a href="{{ url_for('super_admin_approvals') }}" class="btn btn-warning rounded-pill px-4">
+                        <i class="fas fa-check-circle me-2"></i> Approve
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                <div class="card-body text-center">
+                    <i class="fas fa-users-cog fa-3x text-secondary mb-3"></i>
+                    <h5>Manage Admins</h5>
+                    <p class="text-muted small">Promote, demote or remove admins</p>
+                    <a href="{{ url_for('super_admin_manage') }}" class="btn btn-secondary rounded-pill px-4">
+                        <i class="fas fa-user-shield me-2"></i> Manage Admins
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
-    // Single Delete
-    document.querySelectorAll('.deleteBtn').forEach(button => {
-        button.addEventListener('click', function () {
-            const itemId = this.dataset.id;
-            Swal.fire({
-                title: 'Confirm Deletion',
-                text: `Delete item ID ${itemId}?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    window.location.href = `/admin/items/delete/${itemId}`;
-                }
-            });
-        });
-    });
+    <!-- DASHBOARD STATS & ACTIVITY -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i> Market Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <h3 class="text-primary">{{ stats.total_items or '---' }}</h3>
+                                <small class="text-muted">Total Items</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <h3 class="text-success">{{ stats.active_users or '---' }}</h3>
+                                <small class="text-muted">Active Admins</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <h3 class="text-warning">{{ stats.pending_approvals or '---' }}</h3>
+                                <small class="text-muted">Pending Approvals</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    // Batch Delete Confirmation
-    document.getElementById('batchDeleteForm').addEventListener('submit', function (e) {
-        const selected = document.querySelectorAll('.item-checkbox:checked');
-        if (selected.length === 0) {
-            e.preventDefault();
-            Swal.fire('No items selected', '', 'info');
-        } else {
-            const confirmDelete = confirm(`Delete ${selected.length} selected item(s)?`);
-            if (!confirmDelete) e.preventDefault();
-        }
-    });
+        <!-- ACTIVITY LOGS -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0">
+                    <h5><i class="fas fa-history me-2"></i> Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_logs %}
+                    <ul class="list-group list-group-flush">
+                        {% for log in recent_logs %}
+                        <li class="list-group-item border-0 px-0">
+                            <small class="text-muted">{{ log.timestamp.strftime('%b %d %I:%M %p') }}</small>
+                            <p class="mb-0">{{ log.notes }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted text-center mb-0">No recent activity to display.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // DataTables
-    $('#manageTable').DataTable({
-        paging: true,
-        searching: true,
-        ordering: true,
-        responsive: true,
-        dom: 'Bfrtip',
-        buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
-        lengthMenu: [10, 25, 50, 100]
-    });
-});
-</script>
+    {% else %}
+    <!-- NOT LOGGED IN STATE -->
+    <div class="text-center mt-5">
+        <h3 class="text-danger"><i class="fas fa-lock me-2"></i>You must be logged in to access the admin dashboard</h3>
+        <a href="{{ url_for('admin_login') }}" class="btn btn-primary mt-4 px-4">Login Now</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .cardhover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+    }
+    .cardhover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .rounded-pill:hover {
+        transform: scale(1.05);
+        transition: 0.3s ease;
+    }
+</style>
 {% endblock %}

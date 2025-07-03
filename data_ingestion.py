@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 from app import db
-from models import Items, Admins
+from models import Items, Admins, ItemManagementlog
 from werkzeug.security import generate_password_hash
 import logging
 
@@ -223,7 +223,22 @@ class Utils:
             last_num = int(last_item.barcode)
             return str(last_num + 1).zfill(12)
         return "123456789001"
-        
+    
+    @staticmethod
+    def log_id_generator():
+        """
+        Generate a unique log ID like L001, L002, ...
+        """
+        last_log = ItemManagementlog.query.filter(ItemManagementlog.log_id.like('L%')).order_by(
+            db.desc(ItemManagementlog.log_id)
+        ).first()
+
+        if not last_log:
+            return "L001"
+
+        last_num = int(last_log.log_id[1:])
+        return f"L{last_num + 1:03d}"
+            
 
 
 

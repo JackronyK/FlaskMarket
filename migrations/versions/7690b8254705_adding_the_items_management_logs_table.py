@@ -1,8 +1,8 @@
 """adding the items management logs table
 
-Revision ID: 4a1ee254623d
-Revises: 4ca1b4ec966a
-Create Date: 2025-06-27 14:28:46.426420
+Revision ID: 7690b8254705
+Revises: 
+Create Date: 2025-07-01 02:36:42.119347
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4a1ee254623d'
-down_revision = '4ca1b4ec966a'
+revision = '7690b8254705'
+down_revision = None
 branch_labels = None
 depends_on = None
 

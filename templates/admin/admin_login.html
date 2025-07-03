@@ -1,7 +1,5 @@
 {% extends 'admin_base.html' %}
-{% block title%}
-    Admin Login | Flask Market
-{% endblock %}
+{% block title%}Admin Login | Flask Market {% endblock %}
 
 {% block content %}
 <div class="container mt-5 mb-5">
@@ -48,31 +46,17 @@
     </div>
 </div>
 
-<!-- Display any error messages -->
-{% with messages = get_flashed_messages(with_categories=True) %}
-  {% if messages %}
-    {% for category, msg in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show">
-        {{ msg }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+
 
 <!-- JavaScript for password toggle -->
 <script>
-    document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function () {
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', function () {
             const input = this.parentElement.querySelector('input');
             const icon = this.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         });
     });
 </script>

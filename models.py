@@ -18,10 +18,11 @@ class Items(db.Model):
     barcode = db.Column(db.String(length=12), nullable=False, unique=True)
     description = db.Column(db.String(length=1024), nullable=False, unique=True)
     quantity = db.Column(db.Integer(), nullable=False)
-    added_by = db.Column(db.String(length=30), db.ForeignKey('admins.admin_id'), nullable=False)
+    added_by = db.Column(db.String(length=6), db.ForeignKey('admins.admin_id'), nullable=False)
     date_added = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
     # Define the relationship with the Admins table
     admin = db.relationship('Admins', backref="items_added")
+
     def __repr__(self):
         return f'Item {self.name}'
     
@@ -35,6 +36,7 @@ class Admins(db.Model):
     password = db.Column(db.String(length=30), nullable=False)
     is_approved = db.Column(db.Boolean(), nullable=False, default=False)
     is_super_admin = db.Column(db.Boolean(), nullable=False, default=False)
+    is_active = db.Column(db.Boolean, default=True)
     date_registered = db.Column(db.DateTime(), nullable=False, default=db.func.current_timestamp())
 
     def set_password(self, raw_password):
@@ -47,15 +49,32 @@ class Admins(db.Model):
 
 class ItemManagementlog(db.Model):
     __tablename__ = 'item_management_log'
-    log_id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.String(), db.ForeignKey('items.item_id'), nullable=False)
-    action = db.Column(db.String(length=50), nullable=False)  # e.g., 'added', 'updated', 'deleted'
+    log_id = db.Column(db.String(), primary_key=True)
+    item_id = db.Column(db.String(), nullable=False)
+    action = db.Column(db.String(length=50), nullable=False)  
     admin_id = db.Column(db.String(), db.ForeignKey('admins.admin_id'), nullable=False)
     timestamp = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
     notes = db.Column(db.Text)
-    
-    item = db.relationship('Items', backref='management_logs')
+
     admin = db.relationship('Admins', backref='management_logs')
     
     def __repr__(self):
         return f'Log {self.log_id} for Item {self.item_id} by Admin {self.admin_id}'
+
+class AdminActionLog(db.Model):
+    __tablename__ = 'admin_action_log'
+    log_id = db.Column(db.String(), primary_key=True)
+    action = db.Column(db.String(length=50), nullable=False)
+    target_admin_id = db.Column(db.String(), db.ForeignKey('admins.admin_id'), nullable=False)
+    performed_by_admin_id = db.Column(db.String(), db.ForeignKey('admins.admin_id'), nullable=False)
+    timestamp = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
+    notes = db.Column(db.Text)
+
+    target_admin = db.relationship('Admins', foreign_keys=[target_admin_id], backref='received_logs')
+    perfomer_admin = db.relationship('Admins', foreign_keys=[performed_by_admin_id], backref='performed_logs')
+
+    def __repr__(self):
+        return f'Admin Action Log {self.log_id} for Admin {self.target_admin_id} performed by {self.performed_by_admin_id}'
+    @staticmethod
+    def generate_log_id():
+        return f"log-{(datetime.now(ZoneInfo('Africa/Nairobi')))}"

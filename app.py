@@ -5,6 +5,7 @@ from datetime import timedelta
 from flask_migrate import Migrate
 from zoneinfo import ZoneInfo
 from datetime import datetime
+import time
 import csv
 from io import StringIO
 from flask import Response
@@ -17,12 +18,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'mYluv@/|27'
 app.permanent_session_lifetime = timedelta(minutes=10)
 
-from models import db, Items, ItemManagementlog
+from models import db, Items, ItemManagementlog, Admins, AdminActionLog
 db.init_app(app)
 migrate = Migrate(app, db)
 
 from data_ingestion import ItemsData, Admins, Utils
-from models import Admins, Items
+
 
 
 # Home page route
@@ -51,7 +52,13 @@ def super_admin_required(f):
 
 @app.route('/admins')
 def admins():
-    return render_template('/admin/admins_home.html') 
+    stats = {
+        'total_items': Items.query.count(),
+        'active_admins': Admins.query.filter_by(is_approved=True).count(),
+        'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
+    }
+    recent_logs = ItemManagementlog.query.order_by(ItemManagementlog.timestamp.desc()).limit(5).all()
+    return render_template('/admin/admins_home.html', stats=stats, recent_logs=recent_logs) 
 
 @app.route('/admin')
 def admin_signup_page():
@@ -171,17 +178,51 @@ def super_admin_manage():
     if request.method == 'POST':
         admin_id = request.form.get('admin_id')
         action = request.form.get('action')
+        current_admin_id = session.get('admin_id')
+
+        valid_actions = ['promote', 'demote', 'deactivate']
+        if action not in valid_actions:
+            flash("Invalid action requested.", "danger")
+            return redirect(url_for('super_admin_manage'))
+
         admin = Admins.query.get_or_404(admin_id)
-        if admin:
+
+        if admin.admin_id == current_admin_id and action in ['demote', 'deactivate']:
+            flash("You cannot demote or deactivate yourself.", "danger")
+            return redirect(url_for('super_admin_manage'))
+
+        try:
             if action == 'promote':
                 admin.is_super_admin = True
-                flash(f"Admin {admin.name} promoted to Super Admin.")
-            elif action == 'delete':
-                db.session.delete(admin)
-                flash(f"Admin {admin.name} deleted successfully.")
+                flash(f"Admin {admin.name} promoted to Super Admin.", "success")
+            elif action == 'demote':
+                admin.is_super_admin = False
+                flash(f"Admin {admin.name} demoted from Super Admin.", "info")
+            elif action == 'deactivate':
+                admin.is_approved = False
+                flash(f"Admin {admin.name} has been deactivated.", "warning")
+
+            # Log the action
+            admin_log = AdminActionLog(
+                log_id=AdminActionLog.generate_log_id(),
+                action=action,
+                target_admin_id=admin.admin_id,
+                performed_by_admin_id=current_admin_id,
+                timestamp=datetime.now(tz=ZoneInfo("Africa/Nairobi")),
+                notes=f"Admin {admin.name} ({admin.admin_id}) was {action} by Admin ({current_admin_id})"
+            )
+
+            db.session.add(admin_log)
             db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error processing request: {str(e)}", "danger")
+
         return redirect(url_for('super_admin_manage'))
+
     return render_template('admin/super_admin_manage.html', admins=admins)
+
 
 # item Management
 @app.route('/admin/items/upload', methods=['GET', 'POST'])
@@ -311,6 +352,7 @@ def admin_items_edit(item_id):
             notes = "Updated fields: " + ", ".join(changes) if changes else "No visible changes."
 
             log = ItemManagementlog(
+                log_id=Utils.log_id_generator(),  # Generate a unique log ID
                 item_id=item.item_id,
                 action="updated",
                 admin_id=session.get("admin_id"),
@@ -342,14 +384,35 @@ def admin_items_manage():
             if not selected_ids:
                 flash("No items selected for deletion", "warning")
                 return redirect(url_for('admin_items_manage'))
-            
+
             try:
+                # Enable autoflush to ensure all changes are flushed before deletion
+
+
                 for item_id in selected_ids:
-                    item = Items.query.get(item_id)
+                    item = Items.query.filter_by(item_id=item_id).first()
                     if item:
-                        db.session.delete(item)
+                        current_itemid = item.item_id
+                        current_name = item.name
+
+                        # 1. log the deletion action
+                        with db.session.no_autoflush:
+                        # Create a log entry for the deletion
+                            log = ItemManagementlog(
+                                log_id=Utils.log_id_generator(),  # Generate a unique log ID
+                                item_id=current_itemid,
+                                action='deleted',
+                                admin_id=session.get('admin_id'),
+                                notes=f"Item {current_name} deleted in batch by admin {session.get('admin_id')}"
+                            )
+                            db.session.add(log)
+
+                            # 2. delete the item
+                            db.session.delete(item)  
+
+                            # Commit all changes         
                 db.session.commit()
-                flash(f"{len(selected_ids)} items deleted successfully!", "success")
+                flash(f"{len(selected_ids)} items deleted and logged successfully!", "success")
             except Exception as e:
                 db.session.rollback()
                 flash(f"Error deleting items: {str(e)}", "danger")
@@ -365,6 +428,7 @@ def admin_items_delete(item_id):
     try:
         # 1. log  the deletion action
         log = ItemManagementlog(
+            log_id=Utils.log_id_generator(),  # Generate a unique log ID
             item_id=item.item_id,
             action='deleted',
             admin_id=session.get('admin_id'),
@@ -400,6 +464,15 @@ def market_page2():
 def inject_now():
     eat = ZoneInfo("Africa/Nairobi")
     return {'now': datetime.now(tz=eat)}
+
+@app.context_processor
+def inject_stats():
+    stats = {
+        'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
+        'total_items': Items.query.count(),
+        'active_admins': Admins.query.filter_by(is_approved=True).count(),
+    }
+    return dict(stats=stats)
 
 
 

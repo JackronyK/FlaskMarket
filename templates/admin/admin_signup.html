@@ -1,5 +1,4 @@
 {% extends 'admin_base.html' %}
-
 {% block title %}Admin Signup | Flask Market{% endblock %}
 
 {% block content %}
@@ -35,32 +34,32 @@
                         <div class="mb-3">
                             {{ form.password.label(class="form-label fw-bold") }}
                             <div class="input-group">
-                                {{ form.password(class="form-control", placeholder="Create a strong password", id="password") }}
+                                {{ form.password(class="form-control", placeholder="Create password") }}
                                 <button type="button" class="btn btn-outline-secondary toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <small class="form-text text-muted">Minimum 8 characters with numbers and symbols.</small>
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
                             {{ form.confirm_password.label(class="form-label fw-bold") }}
                             <div class="input-group">
-                                {{ form.confirm_password(class="form-control", placeholder="Confirm your password", id="confirmpassword") }}
+                                {{ form.confirm_password(class="form-control", placeholder="Confirm password") }}
                                 <button type="button" class="btn btn-outline-secondary toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Submit -->
                         <div class="d-grid gap-2 mb-3">
                             {{ form.submit(class="btn btn-primary py-2 fw-bold") }}
                         </div>
 
                         <p class="text-center">
-                            Already have an account? <a href="{{ url_for('admin_login') }}">Login here</a>
+                            Already have an account?
+                            <a href="{{ url_for('admin_login') }}">Login here</a>
                         </p>
                     </form>
                 </div>
@@ -69,37 +68,16 @@
     </div>
 </div>
 
-<!-- Password visibility toggle -->
+<!-- Password toggle -->
 <script>
     document.querySelectorAll('.toggle-password').forEach(btn => {
         btn.addEventListener('click', function () {
             const input = this.parentElement.querySelector('input');
             const icon = this.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         });
     });
 </script>
-
-<style>
-    .card {
-        background-color: #fff;
-        border-radius: 12px;
-    }
-    .input-group-text {
-        background-color: #f0f0f0;
-    }
-    .toggle-password:hover {
-        background-color: #e0e0e0;
-    }
-    .form-control:focus,
-    .btn:focus {
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
-</style>
 {% endblock %}

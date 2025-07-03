@@ -1,63 +1,66 @@
 {% extends 'admin_base.html' %}
 
-{% block title%}
-    View Items | Admin Panel
-{% endblock %}
+{% block title %}View Items | Admin Panel{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="fas fa-boxes-stacked me-2"></i>All Market Items</h2>
     <div>
         <a class="btn btn-outline-primary me-2" id="toggleViewBtn">
-            <i class="fas fa-toggle-on me-1"></i>Switch to  Card View
+            <i class="fas fa-toggle-on me-1"></i>Switch to Card View
         </a>
-        <a href="{{ url_for('download_items_csv')}}" class="btn btn-success">
+        <a href="{{ url_for('download_items_csv') }}" class="btn btn-success">
             <i class="fas fa-file-csv me-1"></i>Download CSV
         </a>
     </div>
 </div>
 
-<!-- Custom Toolbar -->
+<!-- Custom Toolbar + Counter -->
 <div id="customToolbar" class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-    <div id="columnButtons" class="btn-group me-2"></div>
-    <div id="exportButtons" class="btn-group"></div>
+    <div>
+        <span class="badge bg-primary fs-6">
+            Total Items: {{ items|length }}
+        </span>
+    </div>
+    <div class="d-flex">
+        <div id="columnButtons" class="btn-group me-2"></div>
+        <div id="exportButtons" class="btn-group"></div>
+    </div>
 </div>
 
-<!--Filter Bar -->
-<form method="get" class="row g-3 mb-4 align-items-end " action="{{ url_for('admin_items_view') }}">
+<!-- Filter Bar -->
+<form method="get" class="row g-3 mb-4 align-items-end" action="{{ url_for('admin_items_view') }}">
     <div class="col-md-3">
         <label class="form-label fw-bold">Filter by Admin</label>
-        <select class="form-select" name= "added_by">
+        <select class="form-select" name="added_by">
             <option value="">All Admins</option>
             {% for admin in all_admins %}
-                <option value="{{ admin.added_by}}" {% if request.args.get('added_by') == admin.added_by %}selected{% endif %}>{{ admin.added_by}}</option>
+            <option value="{{ admin.added_by }}"
+                {% if request.args.get('added_by') == admin.added_by %}selected{% endif %}>
+                {{ admin.added_by }}
+            </option>
             {% endfor %}
-        </select>    
+        </select>
     </div>
     <div class="col-md-3">
         <label class="form-label fw-bold">Start Date</label>
-        <input type="date" class="form-control" name="start_date" value="{{ request.args.get('start_date', '') }}">       
-
+        <input type="date" class="form-control" name="start_date"
+            value="{{ request.args.get('start_date', '') }}">
     </div>
     <div class="col-md-3">
         <label class="form-label fw-bold">End Date</label>
-        <input type="date" class="form-control" name="end_date" value="{{ request.args.get('end_date', '') }}">       
-
+        <input type="date" class="form-control" name="end_date"
+            value="{{ request.args.get('end_date', '') }}">
     </div>
     <div class="col-md-3 d-grid">
         <button type="submit" class="btn btn-primary">
-            <i class="fas fa-filter me-1 "></i> Apply Filters
+            <i class="fas fa-filter me-1"></i>Apply Filters
         </button>
     </div>
 </form>
 
 <!-- Table View -->
 <div id="tableView">
-    <p class="text-muted mb-3">
-        <span class="badge bg-primary">
-            Total Items: {{ items|length }}
-        </span>
-    </p>
     <table class="table table-hover table-bordered align-middle" id="itemsTable">
         <thead class="table-dark">
             <tr>
@@ -68,7 +71,7 @@
                 <th>Description</th>
                 <th>Quantity</th>
                 <th>Added By</th>
-                <th>Added at</th>                
+                <th>Added At</th>
             </tr>
         </thead>
         <tbody>
@@ -77,11 +80,11 @@
                 <td>{{ item.item_id }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.barcode }}</td>
-                <td>Ksh {{ "%.2f"| format (item.price) }}</td>
+                <td>Ksh {{ "%.2f"|format(item.price) }}</td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.added_by }}</td>
-                <td>{{ item.date_added.strftime('%Y-%m-%d %H:%M:%S' )}}</td>
+                <td>{{ item.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -91,17 +94,17 @@
 <!-- Card View -->
 <div id="cardView" class="row g-3 d-none">
     {% for item in items %}
-    <div class="col-md-4 col-lg-4">
+    <div class="col-md-4">
         <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ item.name }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">#{{ item.item_id }}</h6>
-                <p class="card-text"><strong>Barcode</strong> {{ item.barcode }}</p>
+                <p class="card-text"><strong>Barcode:</strong> {{ item.barcode }}</p>
                 <p class="card-text"><strong>Price:</strong> Ksh {{ "%.2f"|format(item.price) }}</p>
                 <p class="card-text"><strong>Qty:</strong> {{ item.quantity }}</p>
-                <p class="card-text"><strong>Added By:</strong> {{ item.added_by}}</p>
-                <p class="card-text"><strong>Added at:</strong> {{ item.date_added.strftime('%Y-%m-%d %H:%M:%S' )}}</p>
-                <p class="card-text text-muted small">{{ item.description[:100] }}</p>
+                <p class="card-text"><strong>Added By:</strong> {{ item.added_by }}</p>
+                <p class="card-text"><strong>Added at:</strong> {{ item.date_added.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                <p class="card-text text-muted small">{{ item.description[:100] }}…</p>
             </div>
         </div>
     </div>
@@ -109,98 +112,63 @@
 </div>
 
 <style>
-    #customToolbar {
-        background: #f8f9fa;
-        border-radius: 8px;
-        padding: 12px 15px;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    #customToolbar .btn {
-        margin-right: 6px;
-    }
-    #exportButtons .btn {
-        margin-left: 6px;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        float: right;
-        margin-top: 0.5rem;
-    }
-
-    .dataTables_wrapper .dataTables_length {
-        float: left;
-    }
+#customToolbar {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+#customToolbar .btn-group .btn {
+    margin: 0 4px;
+}
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    margin-top: 0.5rem;
+}
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    margin-bottom: 0.5rem;
+}
 </style>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const toggleBtn = document.getElementById('toggleViewBtn');
     const tableView = document.getElementById('tableView');
     const cardView = document.getElementById('cardView');
 
-    // check the initial state and set the button text accordingly
-
-
-    function updateButtonText() { 
-        const isTableViewVisible = !tableView.classList.contains('d-none');
-        const icon = isTableViewVisible ? 'fa-th-large' : 'fa-list-ul' 
-        const text = isTableViewVisible ? 'Switch to Card View' : 'Switch to Table View';
-        toggleBtn.innerHTML = `<i class="fas ${icon} me-1"></i>${text}`;
+    function updateButtonText() {
+        const isTable = !tableView.classList.contains('d-none');
+        toggleBtn.innerHTML = isTable
+            ? '<i class="fas fa-th-large me-1"></i>Switch to Card View'
+            : '<i class="fas fa-list-ul me-1"></i>Switch to Table View';
     }
-
-    // run this on page load to set the initial state
     updateButtonText();
-
-    toggleBtn.addEventListener('click', function() {
+    toggleBtn.addEventListener('click', () => {
         tableView.classList.toggle('d-none');
         cardView.classList.toggle('d-none');
         updateButtonText();
     });
 
-    // DataTable init
     const table = $('#itemsTable').DataTable({
         paging: true,
-        searching:true,
+        searching: true,
         ordering: true,
         info: true,
         lengthChange: true,
         responsive: true,
         dom: 'Bfrtip',
         buttons: [
-            {
-                extend:'colvis',
-                text: 'Select Columns',
-                className: 'btn btn-secondary me-2',
-            },
-            {
-                extend:'copyHtml5',
-                className: 'btn btn-dark',
-            },
-            {
-                extend:'excelHtml5',
-                className: 'btn btn-success',
-            },
-            {
-                extend:'csvHtml5',
-                className: 'btn btn-info',
-            },
-            {
-                extend:'pdfHtml5',
-                className: 'btn btn-danger',
-            },
-            {
-                extend:'print',
-                className: 'btn btn-primary',
-            }
-        ],
-        columnDefs:[
-            { target: [0, 1, 2, 3, 4, 5, 6, 7], visible: true}
+            { extend: 'colvis', text: 'Select Columns', className: 'btn btn-secondary' },
+            { extend: 'copyHtml5', className: 'btn btn-dark' },
+            { extend: 'excelHtml5', className: 'btn btn-success' },
+            { extend: 'csvHtml5', className: 'btn btn-info' },
+            { extend: 'pdfHtml5', className: 'btn btn-danger' },
+            { extend: 'print', className: 'btn btn-primary' }
         ]
     });
     table.buttons(0).container().appendTo('#columnButtons');
-    table.buttons([1, 2, 3, 4, 5]).container().appendTo('#exportButtons');
+    table.buttons([1,2,3,4,5]).container().appendTo('#exportButtons');
 });
-
 </script>
 {% endblock %}
