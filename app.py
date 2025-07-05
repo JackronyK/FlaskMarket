@@ -155,15 +155,29 @@ def super_admin_approvals():
     if request.method == 'POST':
         admin_id = request.form.get('admin_id')
         action = request.form.get('action')
+        current_admin_id = session.get('admin_id')
         try:
             admin = Admins.query.get(admin_id)
             if admin:
+                
                 if action == 'approve':
-                    admin.is_approved = True
+                    admin.is_approved = True                    
                     flash(f"Admin {admin.name} approved successfully.")
                 elif action == 'reject':
                     db.session.delete(admin)
                     flash(f"Admin {admin.name} rejected and removed.")
+                current_admin = Admins.query.filter_by(admin_id=current_admin_id).first()
+                admin_log = AdminActionLog(
+                    log_id=AdminActionLog.generate_log_id(),
+                    action=action,
+                    target_admin_id=admin_id,
+                    performed_by_admin_id=current_admin_id,
+                    timestamp=datetime.now(tz=ZoneInfo("Africa/Nairobi")),
+                    notes=f"Admin {admin.name} ({admin.admin_id}) was {action}d by Admin {current_admin.name} ({current_admin_id})"
+                )
+
+
+                db.session.add(admin_log)
                 db.session.commit()
         except Exception as e:
             db.session.rollback()
@@ -203,13 +217,14 @@ def super_admin_manage():
                 flash(f"Admin {admin.name} has been deactivated.", "warning")
 
             # Log the action
+            current_admin = Admins.query.filter_by(admin_id=current_admin_id).first()
             admin_log = AdminActionLog(
                 log_id=AdminActionLog.generate_log_id(),
                 action=action,
                 target_admin_id=admin.admin_id,
                 performed_by_admin_id=current_admin_id,
                 timestamp=datetime.now(tz=ZoneInfo("Africa/Nairobi")),
-                notes=f"Admin {admin.name} ({admin.admin_id}) was {action} by Admin ({current_admin_id})"
+                notes=f"Admin {admin.name} ({admin.admin_id}) was {action} by Admin {current_admin.name} ({current_admin_id})"
             )
 
             db.session.add(admin_log)
@@ -241,6 +256,8 @@ def admin_item_upload():
                 'quantity': form_item.quantity.data,
                 'added_by': session.get('admin_id')
             })
+            # Logging  
+            
             flash("Item added", "success")
         except Exception as e:
             flash(f"Error adding item: {e}", "danger")
@@ -446,7 +463,15 @@ def admin_items_delete(item_id):
     return redirect(url_for('admin_items_manage'))  # 👈 redirect back to manage page
 
   
+@app.route('/admin/activity')
+def admin_activity():
+    logs = AdminActionLog.query.order_by(AdminActionLog.timestamp.desc()).all()
+    return render_template('admin/super_admin_activity.html', logs=logs)
 
+@app.route('/admin/item/activity')
+def item_activity_log():
+    logs = ItemManagementlog.query.order_by(ItemManagementlog.timestamp.desc()).all()
+    return render_template('admin/items_manage_logs.html', logs=logs)
 
 
 
@@ -470,6 +495,8 @@ def inject_stats():
     stats = {
         'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
         'total_items': Items.query.count(),
+        'updated_items': ItemManagementlog.query.filter_by(action='updated').count(),
+        'deleted_items': ItemManagementlog.query.filter_by(action='deleted').count(),
         'active_admins': Admins.query.filter_by(is_approved=True).count(),
     }
     return dict(stats=stats)

@@ -84,6 +84,8 @@
     {% endif %}
 
     <!-- DASHBOARD STATS & ACTIVITY -->
+    <!--Normal Admin Views-->
+    {% if not session.get('is_super_admin')%}
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card shadow-sm border-0">
@@ -100,14 +102,14 @@
                         </div>
                         <div class="col-4">
                             <div class="p-3 bg-light rounded">
-                                <h3 class="text-success">{{ stats.active_admins or '---' }}</h3>
-                                <small class="text-muted">Active Admins</small>
+                                <h3 class="text-success">{{ stats.updated_items or '---' }}</h3>
+                                <small class="text-muted">Updated Items</small>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="p-3 bg-light rounded">
-                                <h3 class="text-warning">{{ stats.pending_approvals or '---' }}</h3>
-                                <small class="text-muted">Pending Approvals</small>
+                                <h3 class="text-warning">{{ stats.deleted_items or '---' }}</h3>
+                                <small class="text-muted">Deleted Items </small>
                             </div>
                         </div>
                     </div>
@@ -134,10 +136,33 @@
                     {% else %}
                     <p class="text-muted text-center mb-0">No recent activity to display.</p>
                     {% endif %}
+
+                </div>
+                <div class="cardView">
+                    <a href="{{url_for('item_activity_log')}}" class="btn btn-info rounded-pill">
+                        <i class="fas fa-info-circle">Full Items Management Log  Table
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if session.get('is_super_admin') %}
+    <div class="continer">
+        <div class="row g-4 mb-4">
+            <div class="col-4">            
+                <h3>Inventories</h3>
+
+                              
+            </div>
+            <div class="col-4">
+                <h3>Admins</h3>
+                <p>This is the Amins Side</p>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
 
     {% else %}
     <!-- NOT LOGGED IN STATE -->

@@ -65,16 +65,16 @@ class AdminActionLog(db.Model):
     __tablename__ = 'admin_action_log'
     log_id = db.Column(db.String(), primary_key=True)
     action = db.Column(db.String(length=50), nullable=False)
-    target_admin_id = db.Column(db.String(), db.ForeignKey('admins.admin_id'), nullable=False)
+    target_admin_id = db.Column(db.String(), nullable=False)
     performed_by_admin_id = db.Column(db.String(), db.ForeignKey('admins.admin_id'), nullable=False)
     timestamp = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
     notes = db.Column(db.Text)
 
-    target_admin = db.relationship('Admins', foreign_keys=[target_admin_id], backref='received_logs')
     perfomer_admin = db.relationship('Admins', foreign_keys=[performed_by_admin_id], backref='performed_logs')
 
     def __repr__(self):
         return f'Admin Action Log {self.log_id} for Admin {self.target_admin_id} performed by {self.performed_by_admin_id}'
     @staticmethod
     def generate_log_id():
-        return f"log-{(datetime.now(ZoneInfo('Africa/Nairobi')))}"
+        timestamp = datetime.now(ZoneInfo('Africa/Nairobi')).strftime('%Y%m%d-%H%M%S')
+        return f"log-{timestamp}"
