@@ -51,14 +51,8 @@ def super_admin_required(f):
     return wrapper
 
 @app.route('/admins')
-def admins():
-    stats = {
-        'total_items': Items.query.count(),
-        'active_admins': Admins.query.filter_by(is_approved=True).count(),
-        'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
-    }
-    recent_logs = ItemManagementlog.query.order_by(ItemManagementlog.timestamp.desc()).limit(5).all()
-    return render_template('/admin/admins_home.html', stats=stats, recent_logs=recent_logs) 
+def admins():    
+    return render_template('/admin/admins_home.html') 
 
 @app.route('/admin')
 def admin_signup_page():
@@ -146,7 +140,7 @@ def admin_login():
 @app.route('/admin/logout')
 def admin_logout():
     session.clear()
-    return redirect(url_for('home_page'))
+    return redirect(url_for('admin_login'))
 
 @app.route('/admin/approvals', methods=['GET', 'POST'])
 @super_admin_required
@@ -224,7 +218,7 @@ def super_admin_manage():
                 target_admin_id=admin.admin_id,
                 performed_by_admin_id=current_admin_id,
                 timestamp=datetime.now(tz=ZoneInfo("Africa/Nairobi")),
-                notes=f"Admin {admin.name} ({admin.admin_id}) was {action} by Admin {current_admin.name} ({current_admin_id})"
+                notes=f"Admin {admin.name} ({admin.admin_id}) was {action}d by Admin {current_admin.name} ({current_admin_id})"
             )
 
             db.session.add(admin_log)
@@ -493,13 +487,21 @@ def inject_now():
 @app.context_processor
 def inject_stats():
     stats = {
-        'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
         'total_items': Items.query.count(),
+        'total_admins': Admins.query.count(),        
+        'pending_approvals': Admins.query.filter_by(is_approved=False).count(),
+        'active_admins': Admins.query.filter_by(is_approved=True).count(),
         'updated_items': ItemManagementlog.query.filter_by(action='updated').count(),
         'deleted_items': ItemManagementlog.query.filter_by(action='deleted').count(),
-        'active_admins': Admins.query.filter_by(is_approved=True).count(),
     }
-    return dict(stats=stats)
+    recent_items_logs = ItemManagementlog.query.order_by(ItemManagementlog.timestamp.desc()).limit(5).all()
+    recent_admins_logs = AdminActionLog.query.order_by(AdminActionLog.timestamp.desc()).limit(5).all()
+
+    return {
+        'stats': stats,
+        'recent_admins_logs': recent_admins_logs,
+        'recent_items_logs': recent_items_logs
+    }
 
 
 
