@@ -1,4 +1,4 @@
-from  flask import Flask, render_template, redirect, url_for, flash, session, request
+from  flask import Flask, render_template, redirect, url_for, flash, session, request, register_blueprint
 from functools import wraps
 from forms import SingleItemForm, FilesLoadForm, AdminFormLogin, AdminFormSignup
 from datetime import timedelta
@@ -9,6 +9,7 @@ import time
 import csv
 from io import StringIO
 from flask import Response
+
 
 
 # Initialize  Flask app
@@ -502,6 +503,11 @@ def inject_stats():
         'recent_admins_logs': recent_admins_logs,
         'recent_items_logs': recent_items_logs
     }
+
+
+## Users Module
+from  Users import users_bp
+app.register_print(users_bp, url_prefix='/user')
 
 
 
