@@ -1,4 +1,4 @@
-from  flask import Flask, render_template, redirect, url_for, flash, session, request, register_blueprint
+from  flask import Flask, render_template, redirect, url_for, flash, session, request
 from functools import wraps
 from forms import SingleItemForm, FilesLoadForm, AdminFormLogin, AdminFormSignup
 from datetime import timedelta
@@ -507,7 +507,7 @@ def inject_stats():
 
 ## Users Module
 from  Users import users_bp
-app.register_print(users_bp, url_prefix='/user')
+app.register_blueprint(users_bp, url_prefix='/user')
 
 
 
