@@ -1,18 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, IntegerField, TextAreaField, SubmitField, PasswordField, SelectField, DateField, FileField, BooleanField
-from wtforms.validators import  DataRequired, Length, Email, Optional
+from wtforms import StringField,  SubmitField, PasswordField, SelectField, DateField, FileField, BooleanField
+from wtforms.validators import  DataRequired, Length, Email
 import pycountry
-from flask_wtf.file import FileAllowed, FileRequired
+from flask_wtf.file import FileAllowed
 
 class UserRegistrationForm(FlaskForm):
     """
     Register the users
     """
     name = StringField('Name', validators=[DataRequired(), Length(min=3, max=30)])
-    email = StringField('Email', validators=[DataRequired(), Length(min=3, max=50), Email(message="Enter a valid email address")])
+    email = StringField('Email', validators=[DataRequired(), Length(min=3, max=50), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=30)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8, max=30)])
-    SubmitField = SubmitField('Create New User')
+    submit = SubmitField('Create New User')
     
 
 class UserLoginForm(FlaskForm):
@@ -25,11 +25,12 @@ def get_country_codes():
     countries.sort(key=lambda x: x[1])
     return countries
 class UserProfileForm(FlaskForm):
-    country_code = SelectField('countrycode', choices=get_country_codes(), message="Select your country", validators=[DataRequired()])
-    phone = StringField('phone', validators=[DataRequired(), Length(min=9, max=10)], message="Enter Phone Number without countryCode")
+    full_name = StringField('Full Name',validators=[DataRequired()] )
+    country_code = SelectField('countrycode', choices=get_country_codes(), validators=[DataRequired()])
+    phone = StringField('phone', validators=[DataRequired(), Length(min=9, max=10)])
     location=StringField('location', validators=[DataRequired()])
-    date_of_birth = DateField('dob', validators=[DataRequired()])
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
     profile_pic = FileField('profilepic', validators=[DataRequired(), FileAllowed('jpg', 'png')])
     invite_code = StringField('invitecode')
-    marketing_opt_in = BooleanField('marketing messages', default=True)
+    marketing_opt_in = BooleanField('marketingmessages', default=True)
 

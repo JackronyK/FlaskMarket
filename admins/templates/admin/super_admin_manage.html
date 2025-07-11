@@ -1,0 +1,76 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+    Super Admin Page | Flask Market
+{% endblock %}
+
+{% block content%}
+<div class="container py-4">
+    <h3 class="mb-4 text-center text-primary"><i class="fas fa-users-cog me-2"></i> Manage Admins</h3>
+
+    {% if admins %}
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shandow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Admin ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in admins %}
+                <tr>
+                    <td>{{ admin.admin_id }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.email }}</td>
+                    <td>
+                        {% if admin.is_super_admin %}
+                        <span class="badge bg-danger">Super Admin</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Regular Admin</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ admin.date_registered.strftime('%b %d, %Y %I:%M %p') }}</td>
+                    <td class="text-center">
+                        <!-- Promote/Demote -->
+                        <form method="POST" class="d-inline">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="{% if admin.is_super_admin %}demote{% else %}promote{% endif %}">
+                            <button type="submit" class="btn btn-sm btn-warning" title="{% if admin.is_super_admin %}Demote to Regular{% else %}Promote to Super{% endif %}">
+                                <i class="fas fa-user-shield"></i> {% if admin.is_super_admin %}Demote{% else %}Promote{% endif %}
+                            </button>
+                        </form>
+
+                        <!-- Deactivate -->
+                        <form method="POST" class="d-inline ms-2" onsubmit="return confirm('Are you sure you want to deactivate this admin?');">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="deactivate">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Deactivate Admin">
+                                <i class="fas fa-user-slash"></i> Deactivate
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-4">
+        <i class="fas fa-info-circle me-2"></i> No admins found. You can add new admins from the admin dashboard.
+    </div>
+    {% endif %}
+</div>
+<style>
+    table th, table td {
+        vertical-align: middle;
+    }
+    .btn-sm i {
+        margin-right: 4px;
+    }
+</style>
+{% endblock %}

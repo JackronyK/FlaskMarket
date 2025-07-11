@@ -1,0 +1,67 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Admin Approvals | Flask Market{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="text-center mb-4 text-primary">
+        <i class="fas fa-user-check me-2"></i> Admin Approvals
+    </h3>
+
+    {% if pending_admins %}
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Admin ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Registered</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in pending_admins %}
+                <tr>
+                    <td><span class="badge bg-secondary">{{ admin.admin_id }}</span></td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.email }}</td>
+                    <td>{{ admin.date_registered.strftime('%b %d, %Y %I:%M %p') }}</td>
+                    <td class="text-center">
+                        <form method="POST" class="d-inline">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="btn btn-sm btn-success" title="Approve this admin">
+                                <i class="fas fa-check me-1"></i> Approve
+                            </button>
+                        </form>
+
+                        <form method="POST" class="d-inline ms-2" onsubmit="return confirm('Are you sure you want to reject this admin?');">
+                            <input type="hidden" name="admin_id" value="{{ admin.admin_id }}">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Reject and remove">
+                                <i class="fas fa-times me-1"></i> Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-4">
+        <i class="fas fa-info-circle me-2"></i> No pending admin approvals at the moment.
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    table th, table td {
+        vertical-align: middle;
+    }
+    .btn-sm i {
+        margin-right: 4px;
+    }
+</style>
+{% endblock %}

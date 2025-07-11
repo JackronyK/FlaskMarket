@@ -1,0 +1,234 @@
+{% extends 'admin_base.html' %}
+{% block title %}Admin Home | Flask Market{% endblock %}
+
+{% block content %}
+    {% if not  session.get('admin_logged_in') %}
+        <div class="text-center mt-5">
+            <h3 class="text-danger"><i class="fas fa-lock me-2"></i>You must be logged in to access the admin dashboard</h3>
+            <a href="{{ url_for('admins.admin_login') }}" class="btn btn-primary mt-4 px-4">Login Now</a>
+        </div>
+    {% else %}
+    <div class="container-fluid py-4">
+        
+        <!-- WELCOME SECTION -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="mb-2">Karibu Admin 🎩</h2>
+                <p class="lead text-muted">
+                    Manage inventory{% if session.get('is_super_admin') %},  approve admins{% endif %}, and keep the market running smoothly.
+                </p>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                        <h5>Upload New Item</h5>
+                        <p class="text-muted small">Add new products to the marketplace</p>
+                        <a href="{{ url_for('admins.admin_item_upload') }}" class="btn btn-outline-success rounded-pill px-4 mt-2">
+                            <i class="fas fa-upload"></i> Upload
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                    <div class="card-body text-center">
+                        <i class="fas fa-boxes fa-3x text-primary mb-3"></i>
+                        <h5>View Inventory</h5>
+                        <p class="text-muted small">View all marketplace items</p>
+                        <a href="{{ url_for('admins.admin_items_view') }}" class="btn btn-primary rounded-pill px-4">
+                            <i class="fas fa-eye me-2"></i> View Items
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tools fa-3x text-warning mb-3"></i>
+                        <h5>Manage Inventory</h5>
+                        <p class="text-muted small">Update, delete or adjust stock levels</p>
+                        <a href="{{ url_for('admins.admin_items_manage') }}" class="btn btn-warning rounded-pill px-4 mt-2">
+                            <i class="fas fa-cogs me-2"></i> Manage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if session.get('is_super_admin') %}
+        <!-- SUPER ADMIN ACTIONS -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card cardhover border-0 shadow-sm h-100 products">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-check fa-3x text-danger mb-3"></i>
+                        <h5>Approve Admins</h5>
+                        <p class="text-muted small">Review and approve admin requests</p>
+                        <a href="{{ url_for('admins.super_admin_approvals') }}" class="btn btn-warning rounded-pill px-4">
+                            <i class="fas fa-check-circle me-2"></i> Approve
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card cardhover border-0 shadow-sm h-100 position-relative">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users-cog fa-3x text-secondary mb-3"></i>
+                        <h5>Manage Admins</h5>
+                        <p class="text-muted small">Promote, demote or remove admins</p>
+                        <a href="{{ url_for('admins.super_admin_manage') }}" class="btn btn-secondary rounded-pill px-4">
+                            <i class="fas fa-user-shield me-2"></i> Manage Admins
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- DASHBOARD STATS & ACTIVITY -->
+        <div class="row g-4">
+            <!--Item Stats for all ADMINS-->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i> Market Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-primary">{{ stats.get('total_items', '---') }}</h3>
+                                    <small class="text-muted">Total Items</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-success">{{ stats.get('updated_items', '---') }}</h3>
+                                    <small class="text-muted">Updated Items</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-warning">{{ stats.get('deleted_items','---') }}</h3>
+                                    <small class="text-muted">Deleted Items </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent ITEM ACTIVITY LOGS -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0">
+                        <h5><i class="fas fa-history me-2"></i> Recent Item Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if recent_items_logs %}
+                        <ul class="list-group list-group-flush">
+                            {% for log in recent_items_logs %}
+                            <li class="list-group-item border-0 px-0">
+                                <small class="text-muted">{{ log.timestamp.strftime('%b %d %I:%M %p') }}</small>
+                                <p class="mb-0">{{ log.notes }}</p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted text-center mb-0">No recent activity to display.</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-end mt-2">
+                        <a href="{{url_for('admins.item_activity_log')}}" class="btn btn-info btn-sm" > 
+                            Full Item Log <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if session.get('is_super_admin') %}
+        <!-- Admin Stats & Activity (Super Admins Only) -->
+        <div class="row g-4 mt-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0">
+                        <h5><i class="fas fa-chart-pie me-2"></i> Admin Statistics</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-primary">{{ stats.get('total_admins', '---')}}</h3>
+                                    <small class="text-muted">Total Admins</small>                                     
+                                </div>
+                           
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-success">{{ stats.get('active_admins', '---')}} </h3>
+                                    <small class="text-muted">Active Admins</small>
+                                </div>                      
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="text-warning">{{ stats.get('pending_approvals', '---')}} </h3>
+                                    <small class="text-muted">Pending Approvals</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>                    
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-0">
+                            <h5><i class="fas fa-history me-2"></i>Recent Admin Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_admins_logs %}
+                            <ul class="list-group list-group-flush">
+                                {% for log in recent_admins_logs%}
+                                <li class="list-group-item border-0 px-0">
+                                    <small class="text-muted">{{ log.timestamp.strftime('%b %d %I:%M %p') }}</small>
+                                    <p class="mb-0">{{ log.notes }}</p>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="text-muted-center mb-0">No recent activity.</p>
+                            {% endif %}
+                        </div>
+                        <div class="text-end mt-2">
+                            <a href="{{url_for('admins.admin_activity')}}" class="btn btn-info btn-sm">
+                                Full Admin Log<i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}                                
+    </div>
+    {% endif %}
+
+
+<style>
+    .cardhover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+    }
+    .cardhover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .rounded-pill:hover {
+        transform: scale(1.05);
+        transition: 0.3s ease;
+    }
+</style>
+{% endblock %}

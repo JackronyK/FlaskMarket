@@ -1,0 +1,87 @@
+<!--General Public base file-->
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Page Title -->
+    <title>{% block title %}Admin | Flask Market{% endblock %}</title>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background:url("{{ url_for('main.static', filename='images/home-bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            min-height: 400vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{url_for('main.home_page') }}">FlaskMarket  🛒</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-success me-2 text-white"
+                            href="{{ url_for('main.market_page')}}"
+                            style="background-color: #2ecc71;border-color: #27ae60;">
+                            <i class="fas fa-store me-1"></i> Market
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning text-white"
+                            href="{{ url_for('admins.admins')}}"
+                            style="background-color: #e67e22;border-color: #d35400;">
+                            <i class="fas fa-user-shield me-1"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %} Content {% endblock%}
+    </main>
+
+    <footer class="footer">
+        <div>© {{ now.year }} Flask Market | Built by @Abuu</div>
+        <a class="navbar-brand" href="#">Flask Market</a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>    
+</body>
+</html>
