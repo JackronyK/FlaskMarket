@@ -1,0 +1,262 @@
+{% extends 'user_base.html' %}
+{% block title %}Profile Update | User{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">User Profile Update</h1>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form id="profileUpdateForm" enctype="multipart/form-data" method="POST" action="{{ url_for('users_bp.user_profile_update') }}">
+        {{ form.hidden_tag() }}
+        
+        <!-- Profile Picture Section -->
+        <div class="profile-section mb-4">
+            <h3 class="section-title">Update Profile Picture <i class="fas fa-camera"></i></h3>
+            <div class="form-group">
+                <label for="profilePicture" class="form-label fw-bold">Choose a new profile picture</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                    {{ form.profilepic(id="profilePicture", class="form-control", onchange="previewImage(event)") }}
+                </div>
+                {% if form.profilepic.errors %}
+                    <div class="form-errors">
+                        {% for error in form.profilepic.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="preview-container mt-3 text-center">
+                    <img id="imagePreview" class="preview-image" alt="Profile picture preview">
+                </div>
+                <div id="profilePicError" class="error-message"></div>
+                <div id="profilePicSuccess" class="success-message"></div>
+            </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="profile-section mb-4">
+            <h3 class="section-title">Personal Information <i class="fas fa-user"></i></h3>
+            <div class="form-group mb-3">
+                {{ form.full_name.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    {{ form.full_name(class="form-control", placeholder="Enter your full name") }}
+                </div>
+                {% if form.full_name.errors %}
+                    <div class="form-errors">
+                        {% for error in form.full_name.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.date_of_birth.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    {{ form.date_of_birth(class="form-control", type="date") }}
+                </div>
+                {% if form.date_of_birth.errors %}
+                    <div class="form-errors">
+                        {% for error in form.date_of_birth.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Contact & Location Section -->
+        <div class="profile-section mb-4">
+            <h3 class="section-title">Contact & Location <i class="fas fa-address-book"></i></h3>
+            <div class="form-group mb-3">
+                {{ form.location.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-location-dot"></i></span>
+                    {{ form.location(class="form-control", placeholder="Enter your location") }}
+                </div>
+                {% if form.location.errors %}
+                    <div class="form-errors">
+                        {% for error in form.location.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.countrycode.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                    {{ form.countrycode(class="form-select") }}
+                </div>
+                {% if form.countrycode.errors %}
+                    <div class="form-errors">
+                        {% for error in form.countrycode.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.phone.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    {{ form.phone(class="form-control", placeholder="Enter phone number (e.g., 0712345678)") }}
+                </div>
+                {% if form.phone.errors %}
+                    <div class="form-errors">
+                        {% for error in form.phone.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Marketing & Referral Section -->
+        <div class="profile-section mb-4">
+            <h3 class="section-title">Marketing Messages & Referral Code <i class="fas fa-message"></i></h3>
+            <div class="form-group mb-3">
+                {{ form.invitecode.label(class="form-label fw-bold") }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-code"></i></span>
+                    {{ form.invitecode(class="form-control", placeholder="Enter your invitation code if any") }}
+                </div>
+                {% if form.invitecode.errors %}
+                    <div class="form-errors">
+                        {% for error in form.invitecode.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ form.marketingmessages(class="form-check-input") }}
+                    {{ form.marketingmessages.label(class="form-check-label fw-bold") }}
+                </div>
+                {% if form.marketingmessages.errors %}
+                    <div class="form-errors">
+                        {% for error in form.marketingmessages.errors %}
+                            <span>{{ error }}</span><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Form Submission Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg submit-button">Update Profile</button>
+            <div id="formError" class="error-message mt-3"></div>
+            <div id="formSuccess" class="success-message mt-3"></div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+        const errorMessage = document.getElementById('profilePicError');
+        const successMessage = document.getElementById('profilePicSuccess');
+        const uploadButton = document.querySelector('.submit-button');
+
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
+        preview.style.display = 'none';
+        uploadButton.disabled = true;
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const validImageTypes = ['image/jpeg', 'image/png'];
+
+            if (!validImageTypes.includes(file.type)) {
+                errorMessage.textContent = 'Please select a valid image file (JPEG or PNG)';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                errorMessage.textContent = 'File size must be less than 5MB';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                uploadButton.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.getElementById('profileUpdateForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const form = document.getElementById('profileUpdateForm');
+        const errorMessage = document.getElementById('formError');
+        const successMessage = document.getElementById('formSuccess');
+        const phoneInput = document.querySelector('input[name="phone"]');
+
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
+
+        // Client-side validation for phone number
+        if (phoneInput.value && !/^\d{10}$/.test(phoneInput.value)) {
+            errorMessage.textContent = 'Phone number must be 10 digits (e.g., 0712345678)';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.redirected) {
+                window.location.href = response.url; // Follow Flask redirect
+                return;
+            }
+
+            const result = await response.json();
+
+            if (response.ok) {
+                successMessage.textContent = 'Profile updated successfully!';
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                form.reset();
+                document.getElementById('imagePreview').style.display = 'none';
+                document.querySelector('.submit-button').disabled = true;
+            } else {
+                errorMessage.textContent = result.error || 'Failed to update profile. Please try again.';
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+        } catch (error) {
+            errorMessage.textContent = 'An error occurred during submission. Please try again.';
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            console.error('Submission error:', error);
+        }
+    });
+</script>
+{% endblock %}

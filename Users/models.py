@@ -12,7 +12,7 @@ class Users(db.Model):
     name = db.Column(db.String(length=30), nullable=False, unique=True)
     email = db.Column(db.String(length=30), nullable=False, unique=True)
     password = db.Column(db.String(length=30), nullable=False)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
 
 
     @staticmethod
@@ -32,35 +32,38 @@ class Users(db.Model):
     
     def __repr__(self):
         return f'User {self.name}'
-class Users_profile(db.Model):
-    __tablename__ = 'users_profiles'
-    userp_id = db.Column(db.String(length=7), primary_key=True)
+class UsersProfile(db.Model):
+    __tablename__ = 'usersProfiles'
+    userp_id = db.Column(db.String(length=6), primary_key=True)
     # Profile Fields    
-    user_id = db.Column(db.String(), db.ForeignKey('users.user_id'), nullable=False)
-    full_name = db.Column(db.String(), nullable=False)
+    user_id = db.Column(db.String(length=6), db.ForeignKey('users.user_id'), nullable=False)
+    full_name = db.Column(db.String(length=30), nullable=False)
     phone_number = db.Column(db.String(length=30), nullable=False)
     location = db.Column(db.String(200), nullable=False )
     date_of_birth = db.Column(db.Date, nullable=False)
     profile_pic = db.Column(db.String(200), nullable=False) # Path|URL to the pic
-    invite_code = db.Column(db.String, nullable=False)
-    marketin_opt_in = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    invite_code = db.Column(db.String(length=30), nullable=False)
+    marketing_opt_in = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
 
     @staticmethod
     def generate_userp_id():
-        last_userp = Users_profile.query.filter(Users_profile.userp_id.like('U%')).order_by(db.desc(Users_profile.userp_id)).first()
-        last_userp_id = last_userp.userp_id
-        if not last_userp_id:
+        last_userp = UsersProfile.query.filter(UsersProfile.userp_id.like('UP%')).order_by(db.desc(UsersProfile.userp_id)).first()
+
+        if not last_userp:
             return "UP001"
-        last_id = int(last_userp_id[1:])
-        return f"U{last_id + 1:03d}"
+        last_userp_id = last_userp.userp_id
+        last_id = int(last_userp_id[2:])
+        return f"UP{last_id + 1:03d}"
 
 
-class User_aunthet_logs(db.Model):
+
+class UserAuthLogs(db.Model):
     log_id = db.Column(db.String(length=6), primary_key=True)
     user_id = db.Column(db.String(), db.ForeignKey('users.user_id'), nullable=False)
     action = db.Column(db.String(), nullable=False)
     timestamp = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
+
 
 
 

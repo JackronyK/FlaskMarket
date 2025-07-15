@@ -1,62 +1,96 @@
 {% extends 'user_base.html' %}
-{% block title %}Profile Update|User{% endblock %}
+{% block title %}Profile Update | User{% endblock %}
 
 {% block content %}
-<div class="profile-container">
-    <div class="text-center">
-        <h1 style="color: darkgreen;" class="fw-bold">User Profile Upate</h1>
-    </div>
-    
-    <div class="profile-section">
-        <h3 style="text-align: justify;">Profile Picture</h3>
-        <div class="profile-picture-area">
-            <img src="placeholder.jpg" alt="Profile Picture" class="profile-pic-preview">
-            <input type="file", id="photo-upload" accept="image/">
-            <button class="bth-upload" onclick="document.getElementById('photo-upload'),click();">
-                Change Photo
-            </button>
-            <p class="hint-text">JPG or PNG. Max 5MB.</p>
+<div class="container-fluid mt-5 mb-6">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4 text-success">
+                        User Profile Update <i class="fas fa-user"></i>
+                    </h2>
+                    <p class="text-muted-center">Update your profile here </p>
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Profile Picture -->
+                        <div class="mb-3">
+                            {{ form.profile_pic.label(class="form-label fw-bold")}}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                {{ form.profile_pic(class="form-control")}}
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="mb-3">
+                            {{ form.full_name.label(class="form-label fw-bold")}}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                {{ form.full_name(class="form-control", placeholder="Enter your full name")}}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.date_of_birth.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                {{ form.date_of_birth(class="form-control", type="date") }}
+                            </div>
+                        </div>
+
+                        <!--Location -->
+                        <div class="mb-3">
+                            {{ form.location.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-location-dot"></i></span>
+                                {{ form.location(class="form-control", placeholder="Enter your location") }}
+                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.country_code.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-code"></i></span>
+                                {{ form.country_code(class="form-select") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.phone.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                {{ form.phone(class="form-control", placeholder="Enter phone number (e.g., 0712345678)") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.invite_code.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-message"></i></span>
+                                {{ form.invite_code(class="form-control", placeholder="Enter your invitation code if any") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.marketing_opt_in(class="form-check-input") }}
+                                {{ form.marketing_opt_in.label(class="form-check-label fw-bold") }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-3">
+                            {{ form.submit(class="btn btn-success py-2 fw-bold") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="profile-section">
-        <h3>Personal Information</h3>
-        <form>
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.full_name.label(class="form-label fw-bold")}}
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    {{ form.full_name(class="form-control", placeholder="Enter your full name") }}
-                </div>
-            </div>
+</div>    
 
-            <div class="mb-3">
-                {{ form.date_of_birth.label(class="form-label fw-bold") }}
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                    {{ form.date_of_birth(class="form-control", type="date", placeholder="Enter your Date of Birth")}}
-                </div>
-            </div>                    
-        </form>
-    </div>
-    <div class="profile-section">
-        <h3>
-            Contact & Location
-            <i class="fas fa-address-book"></i>
-        </h3>
-        <form method="post">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.location.label(class="form-label fw-bold")}}
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-solid fa-location-dot"></i></span>
-                    {{ form.location(class="form-control", type="location", placeholder="Enter your location") }}
-                </div>
-            </div>
-        </form>
 
-    </div>
-
-</div>
 {% endblock %}

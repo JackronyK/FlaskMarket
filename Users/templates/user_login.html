@@ -50,3 +50,15 @@
 
 </div>
 {% endblock %}
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const input = this.parentElement.querySelector('input');
+            const icon = this.querySelector('i');
+            input.type = input.type === 'password'? 'text': 'password';
+            icon.classList.toggle('fa-eye')
+            icon.classList.toggle('fa-eye-slash')
+        });
+    });
+</script>
