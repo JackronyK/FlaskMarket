@@ -1,0 +1,23 @@
+{% extends 'user_base.html' %}
+{% block title %}Activity Logs {% endblock %}
+
+{% block  content %}
+<div class="container mt-4">
+    <h4 class="text-center tex-primary mb">
+        <i class="fas fa-history"></i> User Activity Logs
+    </h4>
+    {% if logs %}
+    <ul class="list-group shadow-sm">
+        {% for log in logs %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-chevron-right text-success me-2"></i>{{ log.action }} </span>
+            <span class="text-muted small">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-center text-muted">No activity logs yet. </p>
+    {% endif %}
+</div>
+
+{% endblock %}

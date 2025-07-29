@@ -22,6 +22,15 @@
                             {{ form_item.price(class="form-control", placeholder="e.g. 499.99") }}
                         </div>
                         <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                {{ form_item.discount.label.text }}
+                                <span id="discountValue" class="ms-2">0%</span>
+                            </label>
+
+                            {{ form_item.discount(class = "form-range", min=0, max=100, step=1, id="discountRange", oninput="updateDiscountValue(this.value)" ) }}
+                        
+                        </div>
+                        <div class="mb-3">
                             {{ form_item.barcode.label(class="form-label fw-bold") }}
                             {{ form_item.barcode(class="form-control", placeholder="e.g. 123456789012") }}
                         </div>
@@ -32,6 +41,15 @@
                         <div class="mb-3">
                             {{ form_item.quantity.label(class="form-label fw-bold") }}
                             {{ form_item.quantity(class="form-control", placeholder="e.g. 10") }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form_item.image_url.label.text }} </label>
+                            {{ form_item.image_url(class="form-control" )}}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form_item.category.label(class="form-label fw-bold") }}
+                            {{ form_item.category(class="form-select", placeholder="category e.g pc, Laptops or accesorries") }}
                         </div>
                         <div class="d-grid">
                             {{ form_item.submit(class="btn btn-success fw-bold") }}
@@ -64,4 +82,19 @@
         </div>
     </div>
 </div>
+<script>
+    // Update discount percentage display
+    function updateDiscountValue(val) {
+        document.getElementById("discountValue").innerText = val + "%";
+    }
+
+    // If pre-filled (e.g., editing an item), initialize the value
+    document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("discountRange");
+        const valueSpan = document.getElementById("discountValue");
+        if (slider && valueSpan) {
+            valueSpan.innerText = slider.value + "%";
+        }
+    });
+</script>
 {% endblock %}

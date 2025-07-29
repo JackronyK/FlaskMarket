@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <heaad>
+        <style>
+            body {font-family: Georgia, 'Times New Roman', Times, serif; padding: 30px;}
+            h2 {color: #2c3e50;}
+            .section {margin-bottom: 20px; }
+            .label {font-weight: bold; }
+        </style>
+    </heaad>
+    <body>
+        <h2>User Profile  Summary</h2>
+        <div class="section"><span class="label">Name: </span> {{ profile.full_name }}</div>
+        <div class="section"><span class="label">Email: </span> {{ user.email }}</div>
+        <div class="section"><span class="label">Phone: </span> {{ profile.phone_number }}</div>
+        <div class="section"><span class="label">Location: </span> {{ profile.location }}</div>
+        <div class="section"><span class="label">DOB: </span> {{ profile.date_of_birth }}</div>
+        <div class="section"><span class="label">Invite Code: </span> {{ profile.invite_code }}</div>
+        <div class="section"><span class="label">Name: </span> {{ "Yes" if profile.marketing_opt_in else "No" }}</div>
+    </body>
+</html>

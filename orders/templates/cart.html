@@ -1,0 +1,55 @@
+{% extends 'user_base.html' %}
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h3 class="text-center text-success mb-4">
+        <i class="fas fa-shopping-cart me-2"></i>Your Cart
+    </h3>
+    {% if line_items %}
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Line Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for li in line_items %}
+            <tr>
+                <td>{{ li.item.name }}</td>
+                <td>Ksh {{ '%.2f'|format(li.item.price) }}</td>
+                <td>{{ li.quantity }}</td>
+                <td>Ksh {{li.line_total }} </td>
+                <td>
+                    <a href="{{ url_for('orders.remove_item', item_id = li.item.item_id ) }}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="3" class="text-end">Total</th>
+                <th colspan="2">Ksh {{ total }}</th>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary mt-4 " >
+        <a href="{{ url_for('users.view_market') }}" class="text-white">
+            <i class="fas fa-cart-shopping me-1"></i>Add More Items
+        </a>
+    </button>
+
+    <form method="post" action="{{ url_for('orders.checkout') }}">
+        <button type="submit" class="btn btn-success float-end">
+            <i class="fas fa-credit-card me-1"></i>Proceed to checkout
+        </button>
+    </form>
+    {% else %}
+    <p class="text-center text-muted">Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}

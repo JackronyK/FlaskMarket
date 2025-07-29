@@ -1,0 +1,64 @@
+{% extends 'user_base.html' %}
+{% block title %}My Profile {% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-6">
+    <div class=" row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-success text-white text-center">
+                    <h4><i class="fas fa-user-circle me-2"></i>My Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Profile Pic-->
+                    <div class="text-center mb-3">
+                        {% if profile and profile.profile_pic %}
+
+                            <img src="{{ url_for('users.static', filename='uploads/profile_pics/' ~ profile.profile_pic.replace('\\', '/')) }}"
+                                class="rounded-6 shadow" style="max-width: 150px; max-height: 150px;" alt="Profile Pic">
+                        {% else %}
+                            <img src=" {{ url_for('users.static', filename='img/default_avatar.jpeg') }}"
+                                class="rounded-circle shadow" style="max-height: 150px; max-width: 150px;" alt="Default Pic">
+                        {% endif %}
+                    </div>
+
+                    <!-- Profile Info -->
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Name: </strong> {{ profile.full_name if profile else user.name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Email: </strong> {{ user.email }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Phone:</strong> {{ profile.phone_number if profile else '-' }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Location: </strong> {{ profile.location if profile else '-' }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Date of Birth: </strong> {{ profile.date_of_birth.strftime('%Y-%m-%d') if profile and profile.date_of_birth else '-' }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Invitation Code: </strong> {{ profile.invite_code if profile else '-' }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Marketing Opt-in: </strong> {{ 'Yes' if profile.marketing_opt_in else 'No'}}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Account Created: </strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </li>
+                    </ul>
+
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('users.user_profile_update') }}" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-edit me-1"></i>Update Profile 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from  wtforms import StringField, FloatField, FileField, IntegerField, TextAreaField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length, Email, Optional
+from  wtforms import StringField, FloatField, FileField, IntegerField, TextAreaField, SubmitField, PasswordField, SelectField
+from wtforms.validators import DataRequired, Length, Email, optional, NumberRange
 from flask_wtf.file import FileAllowed, FileRequired
 
 class SingleItemForm(FlaskForm):
@@ -9,11 +9,13 @@ class SingleItemForm(FlaskForm):
     """
     name = StringField('Name', validators=[DataRequired(), Length(min=3, max=30)])
     price = FloatField('Price', validators=[DataRequired()])
-    barcode = StringField('Barcode', validators=[Optional(), Length(min=1, max=12)])
+    barcode = StringField('Barcode', validators=[optional(), Length(min=1, max=12)])
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=1, max=1024)])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
+    image_url = FileField('Item Picture', validators=[optional(), FileAllowed(['jpg', 'png'], 'only JPG and PNG images allowed')])
+    discount = IntegerField('Discount', validators=[optional(), NumberRange(min=0, max=100, message="Discount must be between 0 and 100")])
+    category = SelectField('Category', choices=[('accessories', 'Accesssories'), ('Laptops', 'Laptop'), ('Personal Computer', 'PC'), ('others', 'others')], default="others", validators=[optional()])
     submit = SubmitField('Add Item')
-
 
 class FilesLoadForm(FlaskForm):
     """

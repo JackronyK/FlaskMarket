@@ -1,0 +1,100 @@
+{% extends 'user_base.html' %}
+{% block title %}Welcome | Abuu Market{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body text-center">
+                    <h2 class="mb-3 text-success">
+                        Welcome {{ user.name }}! <i class="fas fa-handshake"></i>
+                    </h2>
+
+                    {% if profile %}
+                        <div class="mb-3">
+                            {% if profile.profile_pic %}
+                                <img src="{{ url_for('users_bp.static', filename=('uploads/profile_pics/' ~profile.profile_pic )).replace('\\', '/') }}"
+                                    alt="Profile Picture"
+                                    class="rounded-circle shadow-sm"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-user-circle fa-5x text-muted">
+                            {% endif %}
+                        </div>
+
+
+                        <p><strong>Full Name: </strong>{{ profile.full_name }}</p>
+                        <p><strong>Phone: </strong>{{ profile.phone_number }}</p>
+                        <p><strong>Location: </strong>{{ profile.location }}</p>
+                        <p><strong>Date of Birth: </strong>{{ profile.date_of_birth.strftime('%B %d, %Y') }}</p>
+                    {% else %}
+                        <p class="text-muted">You haven't completed your profile yet.</p>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{{ url_for('users.user_profile_update' ) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-edit me-2"></i>Edit Profile
+                        </a>
+                        <a href="{{ url_for('users.view_market') }}" class="btn btn-outline-success">
+                            <i class="fas fa-store me-2"></i>View Market
+                        </a>
+                        <a href="{{ url_for('users.user_logout') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="row">
+        <!-- Profile Info -->
+        <div class="mb-3">
+            {% if profile.profile_pic %}
+                <img src="{{ url_for('users.static', filename=('uploads/profile_pics/' ~profile.profile_pic.replace('\\', '/') )) }}"
+                    alt="Profile Picture"
+                    class="rounded-circle shadow-sm"
+                    style="width: 100px; height: 100px; object-fit: cover;">
+            {% else %}
+                <i class="fas fa-user-circle fa-5x text-muted"> </i>
+            {% endif %}
+        </div>
+         {% if profile %}
+        <div class="col-md-6">
+            <div class="card p-3 shadow-lg mb-3">
+                <h5 class="card-title">Your Profile</h5>
+                <p><strong>Full Name: </strong>{{ profile.full_name }}</p>
+                <p><strong>Email: </strong>{{ user.email }}</p>
+                <p><strong>Phone: </strong>{{ profile.phone_number }}</p>
+                <p><strong>Location: </strong>{{ profile.location }}</p>
+                <p><strong>Date of Birth: </strong>{{ profile.date_of_birth.strftime('%B %d, %Y') }}</p>
+                <a href="{{ url_for('users.user_profile_update' ) }}" class="btn btn-outline-warning btn-sm text-dark">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">You haven't completed your profile yet.</p>
+
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm mb-3">
+                <h5 class="card-title">Quick Actions</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('users.view_market') }}"><i class="fas fa-store"></i> View Market</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fas fa-cart-shopping"></i> My Orders</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fas fa-lock"></i> Change Password</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('users.user_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

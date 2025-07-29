@@ -5,7 +5,15 @@ from admins.models import Items, Admins, ItemManagementlog
 from werkzeug.security import generate_password_hash
 import logging
 
+from flask import flash
+from werkzeug.utils import secure_filename
+import os
+import requests
+from dotenv import load_dotenv
+
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 class ItemsData:
     """
@@ -30,11 +38,33 @@ class ItemsData:
         try:
             itemid = item_data.get('item_id') if 'item_id' in item_data and pd.notna(item_data.get('item_id')) else Utils.item_id_generator()
             bar_code = item_data.get('barcode') if 'barcode' in item_data and item_data['barcode'] else Utils.barcode_generator()
+            
+            item_name = item_data['name']
+            image_file = item_data.get('image_file')
+
+            # If an image file is provided, save it
+            if image_file and image_file.filename != "":
+                image_url = Utils.save_file(image_file, subfolder='items')
+                logger.info(f"Image for {item_name} saved successfully at {image_url}.")
+
+            # Else, check if another item with same name exists
+            else:
+                existing_item = Items.query.filter_by(name=item_name).first()
+                if existing_item and existing_item.image_url:
+                    image_url = existing_item.image_url
+                    logger.info(f"Using existing image for {item_name} at {image_url}.")
+                else:
+                    image_url = Utils.fetch_image(item_name)
+                    logger.info(f"Fetched image for {item_name} from external source: {image_url}.")    
+
             item = Items(
                 item_id= str(itemid),
                 name=item_data['name'],
                 price=item_data['price'],
+                discount=item_data.get('discount'),
                 barcode= str(bar_code),
+                image_url = image_url,
+                category=item_data.get('category', 'others'),
                 description=item_data['description'],
                 quantity=item_data['quantity'],
                 added_by=item_data['added_by']
@@ -63,13 +93,23 @@ class ItemsData:
                 # ensure id: if csv provides id use it else generate
                 item_id = row.get('item_id') if 'item_id' in row and pd.notna(row.get('item_id')) else Utils.item_id_generator()
                 bar_code = row.get('barcode') if 'barcode' in row and pd.notna(row.get('barcode')) else Utils.barcode_generator()
+
+
+                # Check if the item already exists
+                image_url = row.get('image_url')
+                if not image_url or image_url.strip() == "":
+                    image_url = Utils.fetch_image(row['name'])
+
                 item = Items(
                     item_id=str(item_id),
                     name=row['name'],
                     price=row['price'],
+                    discount=row.get('discount'),
                     barcode=str(bar_code),
+                    image_url=image_url,
                     description=row['description'],
                     quantity=row['quantity'],
+                    category=row.get('category', 'others'),
                     added_by=added_by
                 )
                 self.save_items(item)
@@ -93,12 +133,20 @@ class ItemsData:
             for item_data in data:
                 item_id = item_data.get('item_id') if 'item_id' in item_data and item_data['item_id'] else Utils.item_id_generator()
                 bar_code = item_data.get('barcode') if 'barcode' in item_data and item_data['barcode'] else Utils.barcode_generator()
+                
+                # Check if the item already exists
+                image_url = item_data.get('image_url')
+                if not image_url or image_url.strip() == "":
+                    image_url = Utils.fetch_image(item_data['name'])
                 item = Items(
                     item_id=str(item_id),
                     name=item_data['name'],
                     price=item_data['price'],
+                    discount=item_data.get('discount'),
                     barcode=str(bar_code),
+                    image_url=image_url,
                     description=item_data['description'],
+                    category=item_data.get('category', 'others'),
                     quantity=item_data['quantity'],
                     added_by=added_by
                 )
@@ -238,6 +286,78 @@ class Utils:
 
         last_num = int(last_log.log_id[1:])
         return f"L{last_num + 1:03d}"
+    
+    @staticmethod
+    def fetch_image(item_name, save_folder='admins/static/images/items'):
+        access_key = os.getenv("UNSPLASH_ACCESS_KEY")
+        secret_key = os.getenv("UNSPLASH_SECRET_KEY")
+
+        """
+        Fetch an image from an external API based on the item name.
+        """
+        try:
+            headers = {
+                'Accept-Version': 'v1',
+                'Authorization': f'Client-ID {access_key}'
+            }
+
+            params = {
+                'query': item_name,
+                'orientation': 'squarish',
+            }
+            response = requests.get('https://api.unsplash.com/photos/random', headers=headers, params=params)
+            if response.status_code != 200:
+                print(f"[Unsplash API] faied API call: {response.status_code}")
+                return None
+            
+            # Extract the image URL
+            image_url = response.json().get('urls', {}).get('regular')
+            if not image_url:
+                print(f"[Unsplash] Image URL not found in response for {item_name}.")
+                return None
+            
+            # Download the image
+            image_data = requests.get(image_url)
+            if image_data.status_code != 200:
+                print(f"Failed to download image: {image_data.status_code}")
+                return None
+            
+            # Save the image to the specified folder
+            filename = secure_filename(f"{item_name.lower().replace(' ', '_')}.jpg")
+            os.makedirs(save_folder, exist_ok=True)
+            file_path = os.path.join(save_folder, filename)
+
+            with open(file_path, 'wb') as file:
+                file.write(image_data.content)
+            print(f"Image for {item_name} saved successfully at {file_path}.")
+
+            return f"images/items/{filename}"
+        
+        except Exception as e:
+            print(f"[Unsplash] Exception Error fetching image for {item_name}: {e}")
+            return None
+        
+
+    @staticmethod
+    def save_file(file, subfolder='items'):
+        """
+        Save a file to the specified subfolder.
+        """
+        if not file:
+            return None
+        
+        filename = secure_filename(file.filename)
+        upload_folder = os.path.join(os.getcwd(), 'admins', 'static', 'images', subfolder)
+        os.makedirs(upload_folder, exist_ok=True)
+        
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
+        
+        return f"images/{subfolder}/{filename}"
+        
+
+
+
             
 
 

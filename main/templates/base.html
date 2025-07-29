@@ -18,77 +18,151 @@
 
     <!-- Custom Styles -->
     <style>
+        /*Full-screen page background */
         body {
-            background:url("{{ url_for('main.static', filename='images/home-bg.jpg') }}") no-repeat center center fixed;
-            background-size: cover;
-            min-height: 400vh;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('main.static', filename='images/Backgrounds/hero.jpg') }}") center center / cover no-repeat fixed;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
+        /* HERO section (override in home) */
+        .hero {
+            position: relative; 
+            background: url("{{ url_for('main.static', filename='images/Backgrounds/hero.jpg') }}") center/cover no-repeat fixed;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero::before{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgb(0, 0, 0, 0.5);
+        }
+        .hero .hero-content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+        .highlight-title {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                display: inline-block;
+                color: #fff;
+    }
+
+        /* Sticky Navbar */
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        /* Footer */
         .footer {
-            background-color: #343a40;
-            color: white;
+            background: linear-gradient(to right, #17212b, #0e245a);
+            color: #adb5bd;
             text-align: center;
             padding: 1rem 0;
             margin-top: auto;
-
+        }
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            margin: 0 .5rem;
+            transition: color .2s;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+        .gradient-title {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            color: #fff;
+            background: linear-gradient(to right, #2c3e50, #4b6cb7); /* Cool dark blue gradient */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .custom-navbar {
+            background: linear-gradient(to right, #1f1c2c, #150c40);
+            box-shadow: 0 4px 10px rgb(0, 0, 0, 0.3);
+        }
+        .custom-navbar .nav-link {
+            color: #ffffffcc;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+        .custom-navbar .nav-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgb(255, 255, 255, 0.2);
+        }
+        .custom-navbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffffff' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
     </style>
 </head>
+
+
 <body>
+
+
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{url_for('main.home_page') }}">FlaskMarket  🛒</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+    <nav class="navbar navbar-expand-lg sticky-top custom-navbar">      
+        
+        <div class="container">            
+            <a class="navbar-brand text-white fw-bold" href="{{url_for('main.home_page') }}">
+                <i class="fas fa-shopping-basket me-1"></i>FlaskMarket  
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-success me-2 text-white"
-                            href="{{ url_for('main.market_page')}}"
-                            style="background-color: #2ecc71;border-color: #27ae60;">
-                            <i class="fas fa-store me-1"></i> Market
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-warning text-white"
-                            href="{{ url_for('admins.admins')}}"
-                            style="background-color: #e67e22;border-color: #d35400;">
-                            <i class="fas fa-user-shield me-1"></i> Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-outline-success text-white" href="{{url_for('users.user_login')}}" style="background-color: brown;">                            
-                            <i class="fas fa-user me-1"></i> Users
-                        </a>
-
-                    </li>
-
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar ms-auto align-items-lg-center">
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('main.home_page') }}"><i class="fas fa-home me-2"></i>Home</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('users.view_market') }}"><i class="fas fa-shopping-bag me-2"></i>Market</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('main.about_page') }}"><i class="fas fa-info-circle me-2"></i>About</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('main.contact_page') }}"><i class="fas fa-phone-square me-2"></i>Contact</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('admins.admins') }}"><i class="fas fa-shield me-2"></i>Admin</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('users.user_login') }}"><i class="fas fa-user-plus me-2"></i>User</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container mt-4">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-info">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
+    <!--Main Content -->
+
+        <!-- Flash  Messsages-->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            <div class="flash-message">
+                {% for category, message in messages %}                
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         {% endwith %}
 
-        {% block content %} Content {% endblock%}
-    </main>
 
+    <!-- Page Specific Content -->
+    {% block content %}{% endblock %}
+    
+
+    <!-- Footer -->
     <footer class="footer">
-        <div>© {{ now.year }} Flask Market | Built by @Abuu</div>
-        <a class="navbar-brand" href="#">Flask Market</a>
+        <div class="container">
+            <small>© {{ now.year }} FlaskMarket | Built by @Abuu. All rights reserved</small>
+            <div class="mt-1">
+                <a href="{{ url_for('main.about_page') }}">About</a>|
+                <a href="{{ url_for('main.contact_page') }}">Contact</a>|
+                <a href="{{ url_for('main.home_page') }}">Home</a>
+            </div>
+        </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>    
+
 </body>
 </html>

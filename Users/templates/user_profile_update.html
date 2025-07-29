@@ -7,33 +7,42 @@
         <div class="col-md-6 col-lg-5">
             <div class="card shadow-lg border-0 rounded-4">
                 <div class="card-body p-4">
-                    <h2 class="text-center mb-4 text-success">
-                        User Profile Update <i class="fas fa-user"></i>
+                    <h2 class="text-center mb-3 text-success">
+                        Update Your Profile <i class="fas fa-user-circle"></i>
                     </h2>
-                    <p class="text-muted-center">Update your profile here </p>
-                    <form method="post">
+                    <p class="text-muted text-center mb-4">Keep your details updated and accurate</p>
+
+                    <form method="post" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
 
                         <!-- Profile Picture -->
                         <div class="mb-3">
-                            {{ form.profile_pic.label(class="form-label fw-bold")}}
+                            <label class="form-label fw-bold">{{ form.profile_pic.label.text }} </label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-image"></i></span>
-                                {{ form.profile_pic(class="form-control")}}
+                                {{ form.profile_pic(class="form-control", onchange="previewProfileImage(event)")}}
                             </div>
+                            <div class="preview-container mt-2 text-center">
+                                {% if profile and profile.profile_pic %}
+                                    <img id="profilePreview" class="preview-image" src="{{ url_for('users.static', filename=('uploads/profile_pics/' ~ profile.profile_pic.replace('\\', '/') )) }}" alt="Profile Preview" />
+                                {% else %}
+                                    <img id="profilePreview" class="preview-image" src="{{ url_for('users.static', filename='img/default_avatar.jpeg') }}" alt="Default Profile Preview" />
+                                {% endif %}
+                                </div>
                         </div>
 
-                        <!-- Personal Information -->
+                        <!-- Full Name -->
                         <div class="mb-3">
-                            {{ form.full_name.label(class="form-label fw-bold")}}
+                            <label class="form-label fw-bold">{{ form.full_name.label.text }}</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 {{ form.full_name(class="form-control", placeholder="Enter your full name")}}
                             </div>
                         </div>
 
+                        <!-- Date of Birth -->
                         <div class="mb-3">
-                            {{ form.date_of_birth.label(class="form-label fw-bold") }}
+                            <label class="form-label fw-bold">{{ form.date_of_birth.label.text }} </label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 {{ form.date_of_birth(class="form-control", type="date") }}
@@ -42,7 +51,7 @@
 
                         <!--Location -->
                         <div class="mb-3">
-                            {{ form.location.label(class="form-label fw-bold") }}
+                            <label class="form-label fw-bold">{{ form.location.label.text }} </label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-location-dot"></i></span>
                                 {{ form.location(class="form-control", placeholder="Enter your location") }}
@@ -50,30 +59,34 @@
                             </div>
                         </div>
 
+                        <!-- Country Code -->
                         <div class="mb-3">
-                            {{ form.country_code.label(class="form-label fw-bold") }}
+                            <label class="form-label fw-bold" >{{ form.country_code.label.text }} </label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-code"></i></span>
+                                <span class="input-group-text"><i class="fas fa-flag"></i></span>
                                 {{ form.country_code(class="form-select") }}
                             </div>
                         </div>
 
+                        <!-- Phone -->
                         <div class="mb-3">
-                            {{ form.phone.label(class="form-label fw-bold") }}
+                            <label class="form-label fw-bold" >{{ form.phone.label.text }} </label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 {{ form.phone(class="form-control", placeholder="Enter phone number (e.g., 0712345678)") }}
                             </div>
                         </div>
 
+                        <!-- Invite Code -->
                         <div class="mb-3">
-                            {{ form.invite_code.label(class="form-label fw-bold") }}
+                            <label class="form-label fw-bold">{{ form.invite_code.label.text }} </label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-message"></i></span>
-                                {{ form.invite_code(class="form-control", placeholder="Enter your invitation code if any") }}
+                                <span class="input-group-text"><i class="fas fa-gift"></i></span>
+                                {{ form.invite_code(class="form-control", placeholder="Optional Invitation code") }}
                             </div>
                         </div>
 
+                        <!-- Marketing Opt-in -->
                         <div class="mb-3">
                             <div class="form-check">
                                 {{ form.marketing_opt_in(class="form-check-input") }}
@@ -81,7 +94,7 @@
                             </div>
                         </div>
 
-                        <div class="d-grid gap-2 mb-3">
+                        <div class="d-grid gap-2">
                             {{ form.submit(class="btn btn-success py-2 fw-bold") }}
                         </div>
                     </form>
@@ -93,4 +106,16 @@
 </div>    
 
 
+<!-- Profile Picture Script -->
+<script>
+    function previewProfileImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('profilePreview');
+            output.src = reader.result;
+            output.style.display = 'block'
+        };
+        reader.readAsDataURL
+    }
+</script>
 {% endblock %}

@@ -3,10 +3,14 @@ from  datetime import date, datetime
 from flask import current_app, flash
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
-from .models import UsersProfile
-from extensions import db
-from zoneinfo import ZoneInfo
+from .models import UsersProfile, UserAuthLogs
+from extensions import db, mail
 import phonenumbers
+import uuid
+from zoneinfo import ZoneInfo
+from itsdangerous import URLSafeTimedSerializer
+from flask import current_app
+from flask_mail import Message
 
 # ---------
 # Password Strength checker
@@ -125,3 +129,53 @@ def prefill_profile_form(user_id, form):
         flash(f"Error prefiling profile form: {e}", "warning")
     
     return user_profile
+
+
+# ---------
+# Log User Actions
+# -------
+
+def log_user_action(user_id, action):
+    log_entry = UserAuthLogs(
+        log_id=str(uuid.uuid4())[:6].upper(),
+        user_id=user_id,
+        action=action,
+        timestamp=datetime.now(ZoneInfo("Africa/Nairobi"))
+    )
+    db.session.add(log_entry)
+    db.session.commit()
+
+
+
+
+def generate_reset_token(email):
+    s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    return s.dumps(email, salt='password-reset')
+
+
+def verify_reset_token(token, expiration=3600):
+    s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+
+    try:
+        email = s.loads(token, salt='password-reset', max_age=expiration)
+    except Exception:
+        return None
+    return email
+
+
+def send_reset_email(to_email, reset_url, user_name):
+    subject = "Abuu Market | Password Reset Request"
+    body = f"""
+Hello {user_name},
+
+You requested a password reset. Click the link below to reset your password:
+
+{reset_url}
+
+If you did not make this request, simply ignore this email.
+
+-- Abuu Market Team
+"""
+    msg = Message(subject=subject, recipients=[to_email], body=body)
+    mail.send(msg)
+

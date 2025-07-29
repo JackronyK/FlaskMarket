@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us| AbuuMarket{%endblock%}
+
+{%block content%}
+<div class="container my-5">
+    <div class="row">
+        <!-- COntact Info-->
+        <div class="col-md-5 mb-4">
+            <h3 class="text-success mb-3"><i class="fas fa-phone me-2"></i>Get in Touch</h3>
+            <p><strong>Email: </strong>support@flaskmarket.com</p>
+            <p><strong>Phone: </strong>+2547123456789</p>
+            <p><strong>Address: </strong>123 Soko Street, Nairobi, Kenya </p>
+            <p class="text-muted">We aim to respond within 24 -48 hours </p>
+        </div>
+
+        <!-- COntact form  -->
+        <div class="col-md-7">
+            <h3  class="text-success mb-3"><i class="fas fa-envelope"></i> Send us a Message</h3>
+            <form method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label fw-bold") }} <i class="fas fa-user-circle"></i>
+                    {{ form.name(class="form-control", placeholder="Your full name") }}
+                    {% if form.name.errors %}
+                        <div class="form-errors">{{ form.name.erros[0] }} </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label fw-bold") }} <i class="fas fa-envelope"></i>
+                    {{ form.email(class="form-control", placeholder="kamau@gmail.com") }}
+                    {% if form.email.errors %}
+                        <div class="form-errors">{{ form.email.erros[0] }} </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.subject.label(class="form-label fw-bold") }} <i class="fas fa-address-book"></i>
+                    {{ form.subject(class="form-control", placeholder="Your Message....") }}
+                    {% if form.subject.errors %}
+                        <div class="form-errors">{{ form.subject.erros[0] }} </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.message.label(class="form-label fw-bold") }} <i class="fas fa-message"></i>
+                    {{ form.message(class="form-control", rows = "5" ,placeholder="Your Message....") }}
+                    {% if form.message.errors %}
+                        <div class="form-errors">{{ form.message.erros[0] }} </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-grid">
+                    {{ form.submit(class="btn btn-success") }}
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

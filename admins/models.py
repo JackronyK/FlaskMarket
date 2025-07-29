@@ -13,14 +13,20 @@ class Items(db.Model):
     item_id = db.Column(db.String(), nullable=False, primary_key=True)
     name = db.Column(db.String(length=30), nullable=False)
     price = db.Column(db.Float(), nullable=False)
+    discount = db.Column(db.Float(), nullable=True)
     barcode = db.Column(db.String(length=12), nullable=False, unique=True)
     description = db.Column(db.String(length=1024), nullable=False, unique=True)
+    category = db.Column(db.String(length=30), nullable=True)
     quantity = db.Column(db.Integer(), nullable=False)
+    image_url = db.Column(db.String(200), nullable=True)
     added_by = db.Column(db.String(length=6), db.ForeignKey('admins.admin_id'), nullable=False)
     date_added = db.Column(db.DateTime(timezone=True), nullable=False, default=lambda: datetime.now(ZoneInfo("Africa/Nairobi")))
     # Define the relationship with the Admins table
     admin = db.relationship('Admins', backref="items_added")
 
+    @property
+    def on_sale(self):
+        return self.discount_price is not None and self.discount_price < self.price
     def __repr__(self):
         return f'Item {self.name}'
     

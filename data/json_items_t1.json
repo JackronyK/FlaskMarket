@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Wireless Mouse",
+    "description": "Ergonomic mouse with 2.4GHz wireless connection",
+    "category": "Electronics",
+    "price": 1200,
+    "discount": 17,
+    "quantity": 50
+  },
+  {
+    "name": "Bluetooth Speaker",
+    "description": "Portable waterproof Bluetooth speaker",
+    "category": "Audio",
+    "price": 3000,
+    "discount": 18,
+    "quantity": 35
+  },
+  {
+    "name": "Yoga Mat",
+    "description": "Non-slip eco-friendly yoga mat for home workouts",
+    "category": "Fitness",
+    "price": 2500,
+    "discount": 20,
+    "quantity": 20
+  },
+  {
+    "name": "Smart Watch",
+    "description": "Fitness tracker with heart rate and sleep monitor",
+    "category": "Wearables",
+    "price": 7800,
+    "discount": 16,
+    "quantity": 15
+  },
+  {
+    "name": "Laptop Backpack",
+    "description": "Water-resistant bag with USB charging port",
+    "category": "Accessories",
+    "price": 2800,
+    "discount": 14,
+    "quantity": 40
+  }
+]

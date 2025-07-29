@@ -20,6 +20,21 @@ class UserLoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=30)])
     submit = SubmitField('Login')
 
+class UserPasswordResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Length(min=3, max=50), Email()])
+    submit = SubmitField('Reset Password')
+
+class UserPasswordResetConfirmForm(FlaskForm):
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8, max=30)])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Password must match'), Length(min=8, max=30)])
+    submit = SubmitField('Reset Password')
+
+class UserPasswordChangeForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[DataRequired(), Length(min=8, max=30)])
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=8, max=30)])
+    confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Password must match'), Length(min=8, max=30)])
+    submit = SubmitField('Change Password')
+
 def get_country_codes():
     countries = [(country.alpha_2, country.name) for country in  pycountry.countries]
     countries.sort(key=lambda x: x[1])

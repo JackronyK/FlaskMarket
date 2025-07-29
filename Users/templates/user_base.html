@@ -1,4 +1,4 @@
-<!-- templates for admin_base -->
+<!-- templates for user_base V1.2.1 | Last Updated: {{ now.strftime('%Y-%m-%d')}} -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +20,19 @@
         .user-navbar {
             background: linear-gradient(to right, #04682ddd, #6aceb1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
         }
         .user-navbar .navbar-link {
             color: white !important;
             margin: 0 5px;
             border-radius: 5px;
-            transition: 0.3s;
+            transition: 0.3s ease;
         }
-        .user-navbar .navbar-link:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+        .user-navbar .navbar-link:hover,
+        .user-navbar .navbar-link.active {
+            background-color: rgba(255, 255, 255, 0.25);
         }
         .flash-message .alert {
             border-radius: 6px;
@@ -40,7 +44,6 @@
             background-color: #046c3f;
             color: #e5e5e5;
             text-align: center;
-            text-decoration: solid;
             font-weight: bold;
             padding: 1rem 0;
             margin-top: auto;
@@ -75,7 +78,7 @@
             gap: 0.5rem;
         }
         .form-group {
-            margin: bottom 1em;
+            margin-bottom: bottom 1em;
 
         }
         .form-group label {
@@ -84,7 +87,7 @@
             font-weight: bold;
         }
         .form-group input[type='file']{
-            width: 100;
+            width: 100%;
             padding: 0.5rem;
             border: 1px solid green;
             border-radius: 4px;
@@ -119,7 +122,21 @@
         .form-errors {
             color: #dc3545;
             font-size: 0.9rem;
-            margin-top: Ascending 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .cart-toast {
+            animation: slideInUp 0.4s ease-in-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -138,23 +155,37 @@
                     {% if session.get('user_logged_in') %}    
 
                     <li class="nav-item">
-                        <a class="nav-link btn btn-secondary" href="{{ url_for('users.view_market')}}">
-                            <i class="fas fa-eye me-1"></i>View items
+                        <a class="nav-link btn {% if request.endpoint == 'users.user_dashboard' %}btn-success active {% else %} btn-secondary {% endif %}" href="{{ url_for('users.user_dashboard')}}">
+                            <i class="fas fa-eye me-1"></i>User Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-warning text-dark" href="{{ url_for('users.user_profile_update')}}">
+                        <a class="nav-link btn {% if request.endpoint == 'users.user_profile_update' %} btn-warning text-dark active {% else %} btn-warning text-dark {% endif %}" href="{{ url_for('users.user_profile_update')}}">
                             <i class="fas fa-edit me-2"></i>Update Profile
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-danger text-white" href="{{ url_for('users.user_login')}}">
+                        <a class="nav-link btn {% if request.endpoint == 'users.view_profile' %} btn-info text-white active {% else %} btn-info text-white {% endif %}" href="{{ url_for('users.view_profile')}}">
+                            <i class="fas fa-user me-1"></i> My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn {% if request.endpoint == 'users.user_logs' %} btn-outline-primary active {% else %} btn-outline-primary {% endif %}" href="{{ url_for('users.user_logs') }}">
+                            <i class="fas fa-history"></i> Activity Logs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning" href="{{ url_for('users.download_profile') }}">
+                            <i class="fas fa-file-download"></i> Download Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger text-white" href="{{ url_for('users.user_logout')}}">
                             <i class="fa-sign-out-alt me-2"></i>Logout</a>
                     </li>
-  
-                    <!--Guest View-->
+                    
                     {% else %}
-
+                    <!--Guest View-->         
                     <li class="nav-item">
                         <a class="nav-link btn btn-success text-white" href="{{ url_for('users.user_login')}}">
                             <i class="fas fa-user-plus me-1"></i>user log in
@@ -166,8 +197,6 @@
                         </a>
                     </li>
                     {% endif %}
-
-
                 </ul>
             </div>
         </div>
@@ -189,6 +218,21 @@
             {% endif %}
         {% endwith %}
 
+        <!-- Showing cart content -->
+    {% if cart %}
+        <div class="cart-toast position-fixed bottom-0 end-0 m-3 p-3 alert alert-info shadow rounded"
+            style="z-index: 1055; min-width: 280px;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    <span>You have {{ cart|length }} item{{ 's' if cart|length > 1 else '' }} in your cart.</span>
+                </div>
+                <a href="{{ url_for('orders.view_cart') }}" class="btn btn-primary btn-sm ms-2">
+                    <i class="fas fa-shopping-cart me-1"></i> View
+                </a>
+            </div>
+        </div>
+    {% endif %}
 
         <!-- Page Specific Content Block -->
         {% block content %} {% endblock %}
@@ -198,10 +242,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 text-md-start">
-                    <span>&copy; {{ now.year }} Admin Panel | Flask Market </span>
+                    <span>&copy; {{ now.year }} User Panel | Flask Market </span>
                 </div>
                 <div class="col-md-6 text-md-end text-white">
-                    <small class="text-white">v1.2.0</small>
+                    <small class="text-white">v1.2.1</small>
                 </div>
             </div>
         </div>
@@ -238,8 +282,7 @@
             alerts.forEach(alert => {
                 new bootstrap.Alert(alert).close();
             });
-        }, 5000);
+        }, 9000);
     </script>
-    <!--Profile Update Script-->
 </body>
 </html>
