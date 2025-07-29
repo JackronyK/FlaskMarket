@@ -3,7 +3,8 @@ from . import users_bp
 from .forms import UserRegistrationForm, UserProfileForm, UserLoginForm, UserPasswordChangeForm, UserPasswordResetForm, UserPasswordResetConfirmForm
 from .models import Users, UsersProfile, UserAuthLogs
 from orders.models import Order
-from extensions import db
+from extensions import db, mail
+from flask_mail import Message
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from admins.models import Items
@@ -13,9 +14,6 @@ from werkzeug.security import check_password_hash
 from weasyprint import HTML
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
-
-
 
 
 
@@ -354,8 +352,7 @@ def inject_now():
         'cart': get_cart()
     }      
 
-from flask_mail import Message
-from extensions import mail
+
 @users_bp.route('/send_testing_email')
 def send_testing_email():
     msg = Message(
