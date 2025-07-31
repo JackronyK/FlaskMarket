@@ -2810,3 +2810,7 @@
 2025-07-31 20:05:23,453 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:05:23] "GET /admins/admin/items/manage HTTP/1.1" 200 -
 2025-07-31 20:05:25,139 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:05:25] "GET /admins/admin/items/view HTTP/1.1" 200 -
 2025-07-31 20:05:26,221 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:05:26] "GET /admins/admin/items/upload HTTP/1.1" 200 -
+2025-07-31 20:44:52,075 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:44:52] "[32mGET /admins/admin/items/upload HTTP/1.1[0m" 302 -
+2025-07-31 20:44:52,302 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:44:52] "GET /admins/admin/login HTTP/1.1" 200 -
+2025-07-31 20:45:09,274 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:45:09] "GET /admins/admin/login HTTP/1.1" 200 -
+2025-07-31 20:45:23,438 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:45:23] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
