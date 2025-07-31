@@ -2863,3 +2863,14 @@
 2025-07-31 21:37:21,384 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:21] "GET /users/dashboard HTTP/1.1" 200 -
 2025-07-31 21:37:21,474 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:21] "[36mGET /users/static/uploads/profile_pics/2025-07-16/Mac.png HTTP/1.1[0m" 304 -
 2025-07-31 21:37:24,485 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:24] "GET /users/download_profile HTTP/1.1" 200 -
+2025-07-31 21:53:23,491 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:23] "[35m[1mGET /users/download_profile HTTP/1.1[0m" 500 -
+2025-07-31 21:53:23,861 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:23] "GET /users/download_profile?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-07-31 21:53:23,925 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:23] "GET /users/download_profile?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-07-31 21:53:24,075 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:24] "GET /users/download_profile?__debugger__=yes&cmd=resource&f=console.png&s=VoDxPXti8MBDJpQXtpGd HTTP/1.1" 200 -
+2025-07-31 21:53:29,716 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:29] "GET /users/download_profile?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-07-31 21:53:31,676 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:31] "[32mGET /users/dashboard HTTP/1.1[0m" 302 -
+2025-07-31 21:53:31,806 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:31] "GET /users/signin HTTP/1.1" 200 -
+2025-07-31 21:53:49,721 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:49] "[32mPOST /users/signin HTTP/1.1[0m" 302 -
+2025-07-31 21:53:49,743 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:49] "GET /users/dashboard HTTP/1.1" 200 -
+2025-07-31 21:53:49,869 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:49] "GET /users/static/uploads/profile_pics/2025-07-16/Abu.png HTTP/1.1" 200 -
+2025-07-31 21:53:52,077 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:52] "GET /users/download_profile HTTP/1.1" 200 -
