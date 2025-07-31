@@ -22,7 +22,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: url("{{ url_for('main.static', filename='images/Backgrounds/hero.jpg') }}") center center / cover no-repeat fixed;
+            background: url("{{ url_for('main.static', filename='images/Backgrounds/smhomebg.png') }}") center center / cover no-repeat fixed;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -30,7 +30,7 @@
         /* HERO section (override in home) */
         .hero {
             position: relative; 
-            background: url("{{ url_for('main.static', filename='images/Backgrounds/hero.jpg') }}") center/cover no-repeat fixed;
+            background: url("{{ url_for('main.static', filename='images/Backgrounds/smhomebg.png') }}") center/cover no-repeat fixed;
             height: 90vh;
             display: flex;
             align-items: center;
@@ -94,7 +94,7 @@
             transition: all 0.3s ease-in-out;
         }
         .custom-navbar .nav-link:hover {
-            color: #ffffff;
+            color: #ffffffcc;
             text-shadow: 0 0 8px rgb(255, 255, 255, 0.2);
         }
         .custom-navbar .navbar-toggler-icon {

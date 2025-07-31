@@ -2887,3 +2887,34 @@
 2025-07-31 23:34:41,244 - werkzeug - INFO -  * Restarting with stat
 2025-07-31 23:34:48,680 - werkzeug - WARNING -  * Debugger is active!
 2025-07-31 23:34:48,693 - werkzeug - INFO -  * Debugger PIN: 152-035-964
+2025-07-31 23:58:06,678 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 23:58:06] "[32mGET /users/dashboard HTTP/1.1[0m" 302 -
+2025-07-31 23:58:06,968 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 23:58:06] "GET /users/signin HTTP/1.1" 200 -
+2025-08-01 00:05:00,823 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:00] "GET / HTTP/1.1" 200 -
+2025-08-01 00:05:01,294 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:01] "[36mGET /admins/admins/static/images/items/electric_kettle.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:05:01,298 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:01] "[36mGET /admins/admins/static/images/items/office_chair.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:05:01,370 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:01] "[36mGET /admins/admins/static/images/items/laptop_stand.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:05:01,392 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:01] "[36mGET /admins/admins/static/images/items/laptop_backpack.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:05:01,531 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:05:01] "GET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1" 200 -
+2025-08-01 00:09:30,853 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:30] "GET / HTTP/1.1" 200 -
+2025-08-01 00:09:30,973 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:30] "[36mGET /admins/admins/static/images/items/office_chair.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:09:30,975 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:30] "[36mGET /admins/admins/static/images/items/electric_kettle.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:09:31,200 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:31] "[36mGET /admins/admins/static/images/items/laptop_stand.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:09:31,202 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:31] "[36mGET /admins/admins/static/images/items/laptop_backpack.jpg HTTP/1.1[0m" 304 -
+2025-08-01 00:09:31,229 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:09:31] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:10:08,182 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:08] "GET /about HTTP/1.1" 200 -
+2025-08-01 00:10:08,340 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:08] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:10:15,311 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:15] "GET /contact HTTP/1.1" 200 -
+2025-08-01 00:10:15,504 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:15] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:10:23,902 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:23] "GET /about HTTP/1.1" 200 -
+2025-08-01 00:10:24,057 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:10:24] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:11:47,872 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:11:47] "GET /about HTTP/1.1" 200 -
+2025-08-01 00:11:48,023 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:11:48] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:14:39,489 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:14:39] "GET /about HTTP/1.1" 200 -
+2025-08-01 00:14:39,682 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:14:39] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:15:06,025 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:15:06] "GET /contact HTTP/1.1" 200 -
+2025-08-01 00:15:06,198 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:15:06] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:16:17,807 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:16:17] "GET /contact HTTP/1.1" 200 -
+2025-08-01 00:16:17,972 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:16:17] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
+2025-08-01 00:16:50,406 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:16:50] "[32mPOST /contact HTTP/1.1[0m" 302 -
+2025-08-01 00:16:50,427 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:16:50] "GET /contact HTTP/1.1" 200 -
+2025-08-01 00:16:50,593 - werkzeug - INFO - 127.0.0.1 - - [01/Aug/2025 00:16:50] "[36mGET /main/static/images/Backgrounds/smhomebg.png HTTP/1.1[0m" 304 -
