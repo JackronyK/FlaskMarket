@@ -11,7 +11,8 @@ from admins.models import Items
 from .helpers import  check_password_strength, save_file, update_or_create_user_profile, prefill_profile_form, log_user_action, send_reset_email, verify_reset_token, generate_reset_token
 from orders.helpers import get_cart
 from werkzeug.security import check_password_hash
-from weasyprint import HTML
+from io import BytesIO
+from xhtml2pdf import pisa
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -234,10 +235,18 @@ def download_profile():
     user = Users.query.filter_by(user_id=user_id).first()
     profile = UsersProfile.query.filter_by(user_id=user_id).first()
 
+    # Render HTML from template    
     html_content = render_template('user_pdf_template.html', user=user, profile=profile)
-    pdf = HTML(string=html_content).write_pdf()
 
-    response = make_response(pdf)
+    # Generate PDF in memory
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(src=html_content, dest=pdf_buffer)
+
+    if pisa_status.err:
+        flash("Error generating PDF", "danger")
+        return redirect(url_for('users.view_profile'))
+
+    response = make_response(pdf_buffer.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename={user.name}_profile.pdf'
     return response

@@ -2814,3 +2814,52 @@
 2025-07-31 20:44:52,302 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:44:52] "GET /admins/admin/login HTTP/1.1" 200 -
 2025-07-31 20:45:09,274 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:45:09] "GET /admins/admin/login HTTP/1.1" 200 -
 2025-07-31 20:45:23,438 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 20:45:23] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-31 21:21:28,868 - werkzeug - INFO -  * Detected change in 'C:\\Users\\USER\\OneDrive\\CB\\Flask\\Apps_Developed\\FlaskMarket-New\\users\\routes.py', reloading
+2025-07-31 21:21:31,541 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:21:38,153 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:21:46,742 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:21:53,151 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:02,621 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:09,607 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:18,970 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:24,561 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:28,982 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:47,400 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:50,393 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:22:55,484 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:02,497 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:07,362 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:11,592 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:14,397 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:16,511 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:32,989 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:41,969 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:23:46,597 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:02,052 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:06,770 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:12,998 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:17,837 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:21,879 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:40,385 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:43,694 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:24:53,086 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:32:41,086 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-07-31 21:32:41,088 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-31 21:32:41,093 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 21:32:46,721 - werkzeug - WARNING -  * Debugger is active!
+2025-07-31 21:32:46,732 - werkzeug - INFO -  * Debugger PIN: 152-035-964
+2025-07-31 21:32:52,418 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:52] "GET / HTTP/1.1" 200 -
+2025-07-31 21:32:53,200 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:53] "GET /admins/admins/static/images/items/office_chair.jpg HTTP/1.1" 200 -
+2025-07-31 21:32:53,299 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:53] "GET /admins/admins/static/images/items/electric_kettle.jpg HTTP/1.1" 200 -
+2025-07-31 21:32:53,312 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:53] "GET /admins/admins/static/images/items/laptop_backpack.jpg HTTP/1.1" 200 -
+2025-07-31 21:32:53,428 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:53] "GET /main/static/images/Backgrounds/hero.jpg HTTP/1.1" 200 -
+2025-07-31 21:32:53,632 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:32:53] "GET /admins/admins/static/images/items/laptop_stand.jpg HTTP/1.1" 200 -
+2025-07-31 21:33:02,400 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:33:02] "GET /users/signin HTTP/1.1" 200 -
+2025-07-31 21:33:18,267 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:33:18] "[32mPOST /users/signin HTTP/1.1[0m" 302 -
+2025-07-31 21:33:18,354 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:33:18] "GET /users/dashboard HTTP/1.1" 200 -
+2025-07-31 21:33:18,453 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:33:18] "GET /users/static/uploads/profile_pics/2025-07-16/Mac.png HTTP/1.1" 200 -
+2025-07-31 21:33:22,562 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:33:22] "GET /users/download_profile HTTP/1.1" 200 -
+2025-07-31 21:37:21,384 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:21] "GET /users/dashboard HTTP/1.1" 200 -
+2025-07-31 21:37:21,474 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:21] "[36mGET /users/static/uploads/profile_pics/2025-07-16/Mac.png HTTP/1.1[0m" 304 -
+2025-07-31 21:37:24,485 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:37:24] "GET /users/download_profile HTTP/1.1" 200 -

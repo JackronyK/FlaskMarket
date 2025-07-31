@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html>
-    <heaad>
-        <style>
-            body {font-family: Georgia, 'Times New Roman', Times, serif; padding: 30px;}
-            h2 {color: #2c3e50;}
-            .section {margin-bottom: 20px; }
-            .label {font-weight: bold; }
-        </style>
-    </heaad>
-    <body>
-        <h2>User Profile  Summary</h2>
-        <div class="section"><span class="label">Name: </span> {{ profile.full_name }}</div>
-        <div class="section"><span class="label">Email: </span> {{ user.email }}</div>
-        <div class="section"><span class="label">Phone: </span> {{ profile.phone_number }}</div>
-        <div class="section"><span class="label">Location: </span> {{ profile.location }}</div>
-        <div class="section"><span class="label">DOB: </span> {{ profile.date_of_birth }}</div>
-        <div class="section"><span class="label">Invite Code: </span> {{ profile.invite_code }}</div>
-        <div class="section"><span class="label">Name: </span> {{ "Yes" if profile.marketing_opt_in else "No" }}</div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: "Times-Roman", serif;
+            font-size: 12pt;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+
+        .container {
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 10pt;
+            text-align: center;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Profile Summary</h2>
+
+        <div class="section"><span class="label">Full Name:</span> {{ profile.full_name }}</div>
+        <div class="section"><span class="label">Email:</span> {{ user.email }}</div>
+        <div class="section"><span class="label">Phone:</span> {{ profile.phone_number }}</div>
+        <div class="section"><span class="label">Location:</span> {{ profile.location }}</div>
+        <div class="section"><span class="label">Date of Birth:</span> {{ profile.date_of_birth }}</div>
+        <div class="section"><span class="label">Invite Code:</span> {{ profile.invite_code }}</div>
+        <div class="section"><span class="label">Marketing Opt-in:</span> {{ "Yes" if profile.marketing_opt_in else "No" }}</div>
+    </div>
+
+    <div class="footer">
+        Generated on {{ now.strftime('%Y-%m-%d %H:%M:%S') }}
+    </div>
+</body>
 </html>
