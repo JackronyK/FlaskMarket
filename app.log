@@ -2874,3 +2874,16 @@
 2025-07-31 21:53:49,743 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:49] "GET /users/dashboard HTTP/1.1" 200 -
 2025-07-31 21:53:49,869 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:49] "GET /users/static/uploads/profile_pics/2025-07-16/Abu.png HTTP/1.1" 200 -
 2025-07-31 21:53:52,077 - werkzeug - INFO - 127.0.0.1 - - [31/Jul/2025 21:53:52] "GET /users/download_profile HTTP/1.1" 200 -
+2025-07-31 23:33:42,254 - werkzeug - INFO -  * Detected change in 'C:\\Users\\USER\\OneDrive\\CB\\Flask\\Apps_Developed\\FlaskMarket-New\\app.py', reloading
+2025-07-31 23:33:46,219 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:33:55,509 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:04,867 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:07,583 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:21,653 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:24,949 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:33,339 - werkzeug - WARNING -  * Debugger is active!
+2025-07-31 23:34:33,348 - werkzeug - INFO -  * Debugger PIN: 152-035-964
+2025-07-31 23:34:40,648 - werkzeug - INFO -  * Detected change in 'C:\\Users\\USER\\OneDrive\\CB\\Flask\\Apps_Developed\\FlaskMarket-New\\app.py', reloading
+2025-07-31 23:34:41,244 - werkzeug - INFO -  * Restarting with stat
+2025-07-31 23:34:48,680 - werkzeug - WARNING -  * Debugger is active!
+2025-07-31 23:34:48,693 - werkzeug - INFO -  * Debugger PIN: 152-035-964
